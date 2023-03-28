@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks
 
 import 'dart:developer';
 
@@ -123,12 +123,15 @@ class FoodCategoryScreen extends StatelessWidget {
                   child: SizedBox(
                     child: ListView.builder(
                       itemBuilder: (context, index) {
+                        
                         return InkWell( 
                           onTap: () {
+                           
                              Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => ProductDetailScreen(Price: categoryList[index].fullPrice.toString(), description: categoryList[index].itemDesp.toString(), name: categoryList[index].itemName.toString(), index: index)));
+                              builder: (_) => ProductDetailScreen(Price: categoryList[index].fullPrice.toString(), description: categoryList[index].itemDesp.toString(), name: categoryList[index].itemName.toString(), index: index, categoryId: categoryList[index].categoryId, resturantId: categoryList[index].resturantId, products: categoryList ,)));
+                           log("Index ${index.toString()}");
                           },
                           child: Container(
                             height:ScreenSizes.isMeduimScreen(context)? 80.sp:110.sp,
@@ -260,7 +263,7 @@ class FoodCategoryScreen extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  CartScreen(),
+                                                  CartScreen()
                                             ));
                                       },
                                       child: Text(

@@ -169,7 +169,7 @@ class RecommondationScreenState extends State<RecommondationScreen> {
                                 width: ScreenSizes.isMeduimScreen(context)?55.sp:75.sp,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder:(context) => CartScreen(),));
+                                   // Navigator.push(context, MaterialPageRoute(builder:(context) => CartScreen(),));
                                   },
                                   child: Text(
                                     "Add to cart",

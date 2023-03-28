@@ -6,11 +6,11 @@ import 'package:mybigplate/Models/table_model.dart';
 
 class TableRepository {
   String token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYXJ0Y2xpZW50cy5pbi9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTY3OTQ3ODkzNiwiZXhwIjoxNjc5Njk0OTM2LCJuYmYiOjE2Nzk0Nzg5MzYsImp0aSI6ImpaWEhYckhlM2lhcmhhOEYiLCJzdWIiOiI1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.T6jcoetHcmwW_337bsgqVIWdzYL-iZKCOzj3RAjnptQ";
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYXJ0Y2xpZW50cy5pbi9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTY3OTg5NDc2MiwiZXhwIjoxNjgwMTEwNzYyLCJuYmYiOjE2Nzk4OTQ3NjIsImp0aSI6IkRxbEMwSHkyMG1rOXlHYmIiLCJzdWIiOiI1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ViuWIorcFkB66HBBHVZywaau6X8S02zYwAH6priBmk8";
   static const endPoint = "https://laravel.artclients.in/api/auth/table";
   Future<List<TableModel>> bookTable(int id) async {
     Uri uri = Uri.parse(endPoint);
-    log('resturant id : $id');
+ 
     try {
       var response = await http.post(uri,
           headers: {
@@ -23,7 +23,7 @@ class TableRepository {
       if (response.statusCode == 200) {
         final List jsonResponse = jsonDecode(response.body);
         var d = jsonResponse.map((e) => TableModel.fromJson(e)).toList();
-     
+    
         return d;
       } else {
         throw Exception("Something went Wrong");

@@ -765,7 +765,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CartScreen(),
+                            builder: (context) =>CartScreen(),
                           ));
                     }),
                 IconBottomBar(

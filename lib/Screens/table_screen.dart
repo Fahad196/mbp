@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, deprecated_member_use, unnecessary_overrides, unnecessary_brace_in_string_interps, prefer_if_null_operators
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, deprecated_member_use, unnecessary_overrides, unnecessary_brace_in_string_interps, prefer_if_null_operators, avoid_print
 
 import 'dart:convert';
 import 'dart:developer';
@@ -35,12 +35,14 @@ class _TableScreenState extends State<TableScreen> {
   CartInfoBloc? cartInfoBloc;
   @override
   void initState() {
+   
     BlocProvider.of<TableBloc>(context).add(TableLoadedEvent(widget.id ?? 404));
     cartInfoBloc = BlocProvider.of<CartInfoBloc>(context);
     super.initState();
   }
 
-  String? dropdownvalue;
+   String? dropdownvalue;
+  
   final TextEditingController noOfGuest = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -59,6 +61,7 @@ class _TableScreenState extends State<TableScreen> {
           );
         } else if (state is TableLoadedState) {
           List<TableModel> tableList = state.tables;
+       
           return SafeArea(
             child: Stack(
               children: [
@@ -104,9 +107,7 @@ class _TableScreenState extends State<TableScreen> {
                               fontFamily: 'met'),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: 200.h,
-                      // ),
+                     
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 3,
                       ),
@@ -155,8 +156,10 @@ class _TableScreenState extends State<TableScreen> {
                                   fontFamily: 'met'),
                             ),
                             items: tableList.map((list) {
+                              
                               return DropdownMenuItem(
                                 value: list.id.toString(),
+                              
                                 child: Text(
                                   'Table No : ${list.tableNo}',
                                   style: TextStyle(
@@ -168,10 +171,12 @@ class _TableScreenState extends State<TableScreen> {
                                       fontFamily: 'met'),
                                 ),
                               );
+                              
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
                                 dropdownvalue = value.toString();
+                              
                               });
                             },
                           ),

@@ -7,9 +7,9 @@ import 'package:mybigplate/Models/dashboard_hotselling_model.dart';
 import 'package:http/http.dart' as http;
 
 class DashboardHotSellingRepository {
-  static const endpoint = "http://laravel.artclients.in/api/auth/hotFood";
+  static const endpoint = "http://laravel.artclients.in/api/auth/hotfood";
   String token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYXJ0Y2xpZW50cy5pbi9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTY3OTQ3ODkzNiwiZXhwIjoxNjc5Njk0OTM2LCJuYmYiOjE2Nzk0Nzg5MzYsImp0aSI6ImpaWEhYckhlM2lhcmhhOEYiLCJzdWIiOiI1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.T6jcoetHcmwW_337bsgqVIWdzYL-iZKCOzj3RAjnptQ";
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYXJ0Y2xpZW50cy5pbi9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTY3OTg5NDc2MiwiZXhwIjoxNjgwMTEwNzYyLCJuYmYiOjE2Nzk4OTQ3NjIsImp0aSI6IkRxbEMwSHkyMG1rOXlHYmIiLCJzdWIiOiI1IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ViuWIorcFkB66HBBHVZywaau6X8S02zYwAH6priBmk8";
   Future<List<DashboardHotSellingModel>> getHotSellings(int id) async {
     Uri uri = Uri.parse(endpoint);
     try {
@@ -26,7 +26,7 @@ class DashboardHotSellingRepository {
         var d = jsonResponse
             .map((e) => DashboardHotSellingModel.fromJson(e))
             .toList();
-
+      
         return d;
       } else {
         throw Exception("No data found");

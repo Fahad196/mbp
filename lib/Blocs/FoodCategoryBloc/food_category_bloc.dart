@@ -15,10 +15,10 @@ class FoodCategoryBloc extends Bloc<FoodCategoryEvent, FoodCategoryState> {
         (event, emit) => emit(FoodCategoryLoadingState()));
     on<FoodCategoryLoadedEvent>((event, emit) async {
       final products = await repository.getCatogories(event.resId, event.catId);
-      log("products::::::::::::::::::::::::::::: $products");
+     // log("products::::::::::::::::::::::::::::: $products");
       try {
-        if (products.any((element) => element.categoryId == event.catId.toString() && element.resturantId == event.resId.toString())) {
-          log("XXXXXXXXXXXXXXXXXXXXXXXXXXX ${event.catId.toString()}");
+        if (products.where((element) => element.categoryId==event.catId && element.resturantId == event.resId).isEmpty) {
+         // log("XXXXXXXXXXXXXXXXXXXXXXXXXXX ${event.catId.toString()}");
           emit(FoodCategoryLoadedstate(products));
         } else {
           emit(FoodCategoryErrorState(message: "No item added yet"));

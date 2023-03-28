@@ -15,6 +15,7 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     on<TableLoadedEvent>((event, emit) async {
       try {
         final data = await repository.bookTable(event.id);
+        
         emit(TableLoadedState(tables: data));
       } catch (e) {
         emit(TableErrorState(message: e));

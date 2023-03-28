@@ -33,6 +33,7 @@ class QuantityIncreasedState extends CartState {
   List<Object?> get props => [quantity];
  }
 
+
 class CartErrorState extends CartState{
   final String message;
   CartErrorState(this.message);
