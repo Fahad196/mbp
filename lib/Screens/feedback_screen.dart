@@ -125,11 +125,12 @@ class FeedbackScreen extends StatelessWidget {
                                 //   onTap: () => Navigator.pop(context),
                                 //   child: Icon(FontAwesomeIcons.x)),
                                 InkWell(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ResturantScreen(),
-                                      )),
+                                 // onTap: () => 
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => ResturantScreen(),
+                                  //     )),
                                   child: Text(
                                     "Back to home",
                                     style: TextStyle(

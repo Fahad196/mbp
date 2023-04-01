@@ -23,7 +23,8 @@ import '../Widgets/top_curve.dart';
 class TableScreen extends StatefulWidget {
   int? id;
   int index;
-  TableScreen(this.id, this.index);
+  String token;
+  TableScreen(this.id, this.index,this.token);
 
   @override
   State<TableScreen> createState() => _TableScreenState();
@@ -36,7 +37,7 @@ class _TableScreenState extends State<TableScreen> {
   @override
   void initState() {
    
-    BlocProvider.of<TableBloc>(context).add(TableLoadedEvent(widget.id ?? 404));
+    BlocProvider.of<TableBloc>(context).add(TableLoadedEvent(id:widget.id ?? 404, token: widget.token));
     cartInfoBloc = BlocProvider.of<CartInfoBloc>(context);
     super.initState();
   }
@@ -250,7 +251,7 @@ class _TableScreenState extends State<TableScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DashboardScreen(id: widget.id!, index:widget.index,),
+                    builder: (context) => DashboardScreen(id: widget.id!, index:widget.index,token:widget.token),
                   ));
 
             }
@@ -312,7 +313,9 @@ class _TableScreenState extends State<TableScreen> {
                           cartInfoBloc!.add(CartInfoSuccessfulEvent(
                               int.parse(dropdownvalue!),
                               int.parse(noOfGuest.text),
-                              int.parse(widget.id.toString())));
+                              int.parse(widget.id.toString()),
+                              widget.token
+                              ));
                         }
                       },
                       style: ElevatedButton.styleFrom(

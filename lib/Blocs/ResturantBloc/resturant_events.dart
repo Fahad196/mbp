@@ -5,5 +5,10 @@ class ResturantEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ResturantLoadEvent extends ResturantEvent {}
+class ResturantLoadEvent extends ResturantEvent {
+  final String token;
+
+  ResturantLoadEvent({required this.token});
+
+}
 

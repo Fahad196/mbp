@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mybigplate/Blocs/LoginBloc/login_bloc.dart';
 import 'package:mybigplate/Blocs/ResturantBloc/resturant_bloc.dart';
 import 'package:mybigplate/Blocs/ResturantBloc/resturant_events.dart';
 import 'package:mybigplate/Blocs/ResturantBloc/resturant_state.dart';
@@ -15,9 +16,12 @@ import 'package:mybigplate/Util/screen_sizes.dart';
 import '../Widgets/top_curve.dart';
 
 class ResturantScreen extends StatelessWidget {
+  String? token;
+  ResturantScreen({required this.token});
   @override
   Widget build(BuildContext context) {
-      BlocProvider.of<ResturantBloc>(context).add(ResturantLoadEvent());
+      BlocProvider.of<ResturantBloc>(context).add(ResturantLoadEvent(token: token!));
+      
     return Scaffold(body:
         BlocBuilder<ResturantBloc, ResturantState>(builder: (context, state) {
       if (state is ResturantErrorState) {
@@ -98,7 +102,7 @@ class ResturantScreen extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => TableScreen(resturantList[index].resId,index),
+                                    builder: (context) => TableScreen(resturantList[index].resId,index,token!),
                                     
                                   ));
                            

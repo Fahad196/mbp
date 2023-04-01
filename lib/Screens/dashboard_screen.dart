@@ -24,17 +24,16 @@ import 'package:mybigplate/Screens/order_deatail_screen.dart';
 import 'package:mybigplate/Screens/order_summary_screen.dart';
 import 'package:mybigplate/Screens/product_detail_screen.dart';
 import 'package:mybigplate/Screens/profile_screen.dart';
-import 'package:mybigplate/Screens/recommendation_screen.dart';
 import 'package:mybigplate/Screens/tranfer_orders_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
-
 import '../Blocs/DashboardMenuBloc/dashboard_menu_state.dart';
 
 class DashboardScreen extends StatefulWidget {
   int id;
   int index;
-  DashboardScreen({required this.id, required this.index});
+  String token;
+  DashboardScreen({required this.id, required this.index,required this.token});
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -46,11 +45,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     BlocProvider.of<DashboardHotSellingBloc>(context)
-        .add(DashboardHotSellingLoadedEvent(widget.id));
+        .add(DashboardHotSellingLoadedEvent(widget.id,widget.token));
     BlocProvider.of<DashboardTodayDishBloc>(context)
-        .add(DashboardTodayDishLoadedEvent(widget.id));
+        .add(DashboardTodayDishLoadedEvent(widget.id,widget.token));
     BlocProvider.of<DashboardMenuBloc>(context)
-        .add(DashboardMenuLoadedEvent(widget.id));
+        .add(DashboardMenuLoadedEvent(widget.id,widget.token));
     super.initState();
   }
 
@@ -231,7 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ProductDetailScreen(
-                                          Price: todayDish[index]
+                                          fullPrice: todayDish[index]
                                               .fullPrice
                                               .toString(),
                                           description: todayDish[index]
@@ -240,6 +239,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           name: todayDish[index]
                                               .itemName
                                               .toString(),
+                                         halfPrice: todayDish[index].halfPrice.toString(),
+                                         index: index,
+                                         resturantId: todayDish[index].resturantId,
+                                         categoryId: todayDish[index].categoryId,
+                                         products: todayDish, token: widget.token,
                                         ),
                                       ));
                                 },
@@ -321,27 +325,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                     ])),
-                                Expanded(child: SizedBox()),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                RecommondationScreen()));
-                                  },
-                                  child: Text(
-                                    "View all ",
-                                    style: TextStyle(
-                                        fontFamily: 'met',
-                                        fontSize:
-                                            ScreenSizes.isMeduimScreen(context)
-                                                ? 10.sp
-                                                : 15.sp,
-                                        color: AppColors.dividerColor,
-                                        fontWeight: FontWeight.w200),
-                                  ),
-                                ),
+                               
                               ],
                             ),
                             SizedBox(
@@ -358,7 +342,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder:(context) => ProductDetailScreen(name: hotSellings[widget.index].itemName.toString(), Price: hotSellings[widget.index].fullPrice.toString(), description: hotSellings[widget.index].itemDesp.toString(),),));
+                                          Navigator.push(context, MaterialPageRoute(builder:(context) => ProductDetailScreen(name: hotSellings[widget.index].itemName.toString(), fullPrice: hotSellings[widget.index].fullPrice.toString(), description: hotSellings[widget.index].itemDesp.toString(), halfPrice: hotSellings[widget.index].halfPrice.toString(),index: index,categoryId: hotSellings[index].categoryId,resturantId: hotSellings[index].resturantId,products: hotSellings, token: widget.token,),));
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
@@ -676,6 +660,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                                               .id,
                                                                       index: widget
                                                                           .index,
+                                                                    
+                                                                    token: widget.token,      
                                                                     )));
                                                       },
                                                       child: Container(
@@ -725,6 +711,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     .toString(),
                                                 resId: widget.id,
                                                 index: widget.index,
+                                                token: widget.token,
                                               ),
                                             ));
                                       },
@@ -765,7 +752,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>CartScreen(),
+                            builder: (context) =>CartScreen(widget.token),
                           ));
                     }),
                 IconBottomBar(

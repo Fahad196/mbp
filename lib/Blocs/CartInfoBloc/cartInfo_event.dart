@@ -13,7 +13,8 @@ class CartInfoSuccessfulEvent extends CartInfoEvent {
   final tableNo;
   final totalGuest;
   final resturantId;
+  String token;
 
-  CartInfoSuccessfulEvent(this.tableNo, this.totalGuest, this.resturantId);
+  CartInfoSuccessfulEvent(this.tableNo, this.totalGuest, this.resturantId,this.token);
   
 }

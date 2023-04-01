@@ -15,14 +15,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddToCartEvent>((event, emit) async{
       try {
         final data = await repository.addToCart(event.itemId, event.itemPrice,
-            event.itemQuantity, event.categoryId, event.resturantId,event.type,event.Portion);
-        emit(AddToCartState(products: data as List<CartModel>));
+            event.itemQuantity, event.categoryId, event.resturantId,event.type,event.Portion,event.token);
+            if(data.message=="Item Added Successfully"){
+              emit(AddToCartState(products: data as List<CartModel>));
+   //Item Already Added 
+            }else if(data.message=="Item Already Added "){
+              emit(CartErrorState("Already in Cart"));
+            }
+        
       } catch (e) {
         emit(CartErrorState(e.toString()));
       }
     });
-    on<IncreaseProductQuantityEvent>((event, emit) {
     
-    } );
   }
 }

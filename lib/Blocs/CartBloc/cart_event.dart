@@ -17,31 +17,11 @@ class AddToCartEvent extends CartEvent {
   final int resturantId;
   final String type;
   final String Portion;
+  final String token;
   AddToCartEvent(this.itemId, this.itemPrice, this.itemQuantity,
-      this.categoryId, this.resturantId, this.type, this.Portion);
+      this.categoryId, this.resturantId, this.type, this.Portion,this.token);
 }
 
-class IncreaseProductQuantityEvent extends CartEvent {
-  final CartModel product;
-  final int? totalAmount;
-  IncreaseProductQuantityEvent({
-    required this.product,
-     this.totalAmount
-  });
-  @override
-  List<Object?> get props => [product.itemQuantity];
-}
-
-class DecreaseProductQuantityEvent extends CartEvent {
-  final CartModel product;
-  final int ? totalAmount;
-  DecreaseProductQuantityEvent({
-    required this.product,
-     this.totalAmount
-  });
-  @override
-  List<Object?> get props => [product.itemQuantity];
-}
 
 // class GetFinalAmount extends CartEvent {
 //   final CartModel products;

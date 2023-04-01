@@ -4,59 +4,59 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_bloc.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_event.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_state.dart';
-import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_bloc.dart';
-import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_event.dart';
-import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_state.dart';
-import 'package:mybigplate/Blocs/UpdateQuantityCartBloc/update_quantity_cart_bloc.dart';
-import 'package:mybigplate/Blocs/UpdateQuantityCartBloc/update_quantity_cart_state.dart';
-import 'package:mybigplate/Models/food_category_model.dart';
-import 'package:mybigplate/Models/update_quantity_cart_model.dart';
 import 'package:mybigplate/Util/colors.dart';
-
+import '../Models/food_category_model.dart';
 import '../Util/my_icons.dart';
 import '../Util/screen_sizes.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String name;
-  final String Price;
+  final String fullPrice;
+  final String halfPrice;
   final String description;
   final categoryId;
   final resturantId;
-  final List<FoodCategoryModel>? products;
+  final List? products;
   final int? index;
+  final String token;
   ProductDetailScreen(
       {super.key,
       required this.name,
-      required this.Price,
+      required this.fullPrice,
+      required this.halfPrice,
       required this.description,
       this.index,
       this.products,
       this.categoryId,
-      this.resturantId});
+      this.resturantId, 
+      required this.token
+      });
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  UpdateQuantityCartBloc? updateQuantityCartBloc;
+  CartBloc? cartBloc;
   @override
   void initState() {
-    updateQuantityCartBloc = BlocProvider.of<UpdateQuantityCartBloc>(context);
+    cartBloc= BlocProvider.of<CartBloc>(context);
+    super.initState();
   }
+  int fullItemQuantity = 0;
+  int halfItemQuantity = 0;
 
-  //int itemQuantity = 0;
   @override
   Widget build(BuildContext context) {
-    print("index ${widget.index}");
-  
+     print("index ${widget.index}");
+     //print("id ::::: ${widget.products![widget.index!]}");
+    //print(widget.resturantId.runtimeType);
+    //print("half price : : : : : :${widget.halfPrice}");
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
@@ -130,7 +130,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   Expanded(child: SizedBox()),
                   Text(
-                    "${widget.Price} Rs", //rate
+                    "${widget.fullPrice} Rs", //rate
                     style: TextStyle(
                       fontFamily: 'met',
                       fontSize:
@@ -174,6 +174,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ElevatedButton(
                     onPressed: () {
                       dailogMethod(context);
+                    
                     },
                     child: Text(
                       "Add to cart",
@@ -244,27 +245,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ));
   }
 
-   dailogMethod(BuildContext context) {
+  dailogMethod(BuildContext context) {
+   
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return BlocBuilder<UpdateQuantityCartBloc, UpdateQuantityCartState>(
-              builder: (context, state) {
-            if (state is UpdateQuantityCartErrorState) {
-              return Text("somthing went wrong");
-            } else if (state is UpdateQuantityCartLoadingState) {
-              Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is UpdateItemQuantityCartState) {
-              List<UpdateQuantityCartModel> updateQuantity = state.quantityList;
-
-              return Dialog(
+          return Stack(
+            children: [
+              Dialog(
                 child: Container(
                   height: ScreenSizes.isMeduimScreen(context) ? 230.sp : 270.sp,
                   width: ScreenSizes.isMeduimScreen(context) ? 250.sp : 300.sp,
+                  padding: EdgeInsets.all(6.sp),
                   child: Column(
                     children: [
+                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -291,9 +286,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         height: 5.sp,
                       ),
                       SizedBox(
-                        height: ScreenSizes.isMeduimScreen(context)
-                            ? 90.sp
-                            : 110.sp,
+                        height:
+                            ScreenSizes.isMeduimScreen(context) ? 90.sp : 110.sp,
                         child: Row(
                           children: [
                             Image.asset(
@@ -305,6 +299,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
                                   children: [
@@ -325,42 +320,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           ? 8.sp
                                           : 14.sp,
                                     ),
-                                    SizedBox(
-                                      width: 21.sp,
-                                    ),
-                                    Image.asset(
-                                      "assets/images/ratingwob.png",
-                                      height:
-                                          ScreenSizes.isMeduimScreen(context)
-                                              ? 20.sp
-                                              : 40.sp,
-                                      width: ScreenSizes.isMeduimScreen(context)
-                                          ? 38.sp
-                                          : 60.sp,
-                                    )
                                   ],
-                                ),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: SizedBox(
-                                        width:
-                                            ScreenSizes.isMeduimScreen(context)
-                                                ? 100.sp
-                                                : 130.sp,
-                                        child: Text(
-                                          widget.description,
-                                          style: TextStyle(
-                                              fontSize:
-                                                  ScreenSizes.isMeduimScreen(
-                                                          context)
-                                                      ? 8.sp
-                                                      : 12.sp,
-                                              fontFamily: 'met',
-                                              color: Color.fromARGB(
-                                                      255, 84, 82, 82)
-                                                  .withOpacity(.9)),
-                                        )),
-                                  ),
                                 ),
                                 SizedBox(
                                   height: ScreenSizes.isMeduimScreen(context)
@@ -373,13 +333,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       "Server 1 | ",
                                       style: TextStyle(
                                           fontFamily: 'met',
-                                          fontSize: ScreenSizes.isMeduimScreen(
-                                                  context)
-                                              ? 7.sp
-                                              : 12.sp,
-                                          color:
-                                              Color.fromARGB(255, 133, 128, 128)
-                                                  .withOpacity(.9)),
+                                          fontSize:
+                                              ScreenSizes.isMeduimScreen(context)
+                                                  ? 7.sp
+                                                  : 12.sp,
+                                          color: Color.fromARGB(255, 133, 128, 128)
+                                              .withOpacity(.9)),
                                     ),
                                     Icon(
                                       Icons.timer,
@@ -393,13 +352,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       "30 min",
                                       style: TextStyle(
                                           fontFamily: 'met',
-                                          fontSize: ScreenSizes.isMeduimScreen(
-                                                  context)
-                                              ? 7.sp
-                                              : 12.sp,
-                                          color:
-                                              Color.fromARGB(255, 133, 128, 128)
-                                                  .withOpacity(.9)),
+                                          fontSize:
+                                              ScreenSizes.isMeduimScreen(context)
+                                                  ? 7.sp
+                                                  : 12.sp,
+                                          color: Color.fromARGB(255, 133, 128, 128)
+                                              .withOpacity(.9)),
                                     ),
                                     SizedBox(
                                       width: ScreenSizes.isMeduimScreen(context)
@@ -433,93 +391,139 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       SizedBox(
                         height: 8.sp,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Half",
-                            style: TextStyle(
-                              fontFamily: 'met',
-                              fontSize: ScreenSizes.isMeduimScreen(context)
-                                  ? 8.sp
-                                  : 14.sp,
-                            ),
-                          ),
-                          Expanded(child: SizedBox()),
-                          Text("200Rs",
-                              style: TextStyle(
-                                fontFamily: 'met',
-                                fontSize: ScreenSizes.isMeduimScreen(context)
-                                    ? 8.sp
-                                    : 14.sp,
-                              )),
-                          SizedBox(
-                            width: 5.sp,
-                          ),
-                          Container(
-                            height: ScreenSizes.isMeduimScreen(context)
-                                ? 15.sp
-                                : 25.sp,
-                            width: ScreenSizes.isMeduimScreen(context)
-                                ? 35.sp
-                                : 65.sp,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(23),
-                                color: AppColors.darkOrange),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      widget.halfPrice != null &&
+                              widget.products![widget.index!].isHalf == "1"
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (updateQuantity[widget.index!]
-                                            .itemQuantity! >
-                                        0) {
-                                      setState(() {
-                                        updateQuantity[widget.index!]
-                                            .itemQuantity;
-                                      });
-                                    }
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.minus,
-                                    color: AppColors.textColorWhite,
-                                    size: ScreenSizes.isMeduimScreen(context)
+                                Text(
+                                  "Half",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize: ScreenSizes.isMeduimScreen(context)
                                         ? 8.sp
                                         : 14.sp,
                                   ),
                                 ),
-                                Text(
-                                    updateQuantity[widget.index!]
-                                        .itemQuantity
-                                        .toString(),
+                                Expanded(child: SizedBox()),
+                                Text("${widget.halfPrice} Rs",
                                     style: TextStyle(
-                                        fontFamily: 'met',
-                                        fontSize:
-                                            ScreenSizes.isMeduimScreen(context)
-                                                ? 8.sp
-                                                : 14.sp,
-                                        color: AppColors.textColorWhite)),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      updateQuantity[widget.index!]
-                                          .itemQuantity!;
-                                      //log(itemQuantity++);
-                                    });
-                                  },
-                                  child: Icon(
-                                    FontAwesomeIcons.plus,
-                                    color: AppColors.textColorWhite,
-                                    size: ScreenSizes.isMeduimScreen(context)
-                                        ? 8.sp
-                                        : 14.sp,
+                                      fontFamily: 'met',
+                                      fontSize: ScreenSizes.isMeduimScreen(context)
+                                          ? 8.sp
+                                          : 14.sp,
+                                    )),
+                                SizedBox(
+                                  width: 5.sp,
+                                ),
+                                Container(
+                                  height: ScreenSizes.isMeduimScreen(context)
+                                      ? 15.sp
+                                      : 25.sp,
+                                  width: ScreenSizes.isMeduimScreen(context)
+                                      ? 35.sp
+                                      : 65.sp,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(23),
+                                      color: AppColors.darkOrange),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          if (halfItemQuantity > 0) {
+                                            setState(() {
+                                              halfItemQuantity--;
+                                            });
+                                          }
+                                        },
+                                        child: Icon(
+                                          FontAwesomeIcons.minus,
+                                          color: AppColors.textColorWhite,
+                                          size: ScreenSizes.isMeduimScreen(context)
+                                              ? 8.sp
+                                              : 14.sp,
+                                        ),
+                                      ),
+                                      Text(halfItemQuantity.toString(),
+                                          style: TextStyle(
+                                              fontFamily: 'met',
+                                              fontSize: ScreenSizes.isMeduimScreen(
+                                                      context)
+                                                  ? 8.sp
+                                                  : 14.sp,
+                                              color: AppColors.textColorWhite)),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            halfItemQuantity++;
+                                          });
+                                        },
+                                        child: Icon(
+                                          FontAwesomeIcons.plus,
+                                          color: AppColors.textColorWhite,
+                                          size: ScreenSizes.isMeduimScreen(context)
+                                              ? 8.sp
+                                              : 14.sp,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    width: 20.sp,
+                                  ),
+                                ),
+                                halfItemQuantity == 0
+                                    ? Expanded(child: Container())
+                                    : ElevatedButton(
+                                        onPressed: () {
+                                          cartBloc!.add(
+                                              AddToCartEvent(
+                                                  widget
+                                                      .products![widget.index!].id!,
+                                                  int.parse(widget
+                                                      .products![widget.index!]
+                                                      .halfPrice!),
+                                                  halfItemQuantity,
+                                                  int.parse(widget
+                                                      .products![widget.index!]
+                                                      .categoryId!),
+                                                  int.parse(widget
+                                                      .products![widget.index!]
+                                                      .resturantId!),
+                                                  widget.products![widget.index!]
+                                                      .type!,
+                                                  "Half",
+                                                  widget.token
+                                                  ));
+                                                  
+                                                  
+                                        },
+                                        child: Text("Add to cart",
+                                            style: TextStyle(
+                                              fontFamily: 'met',
+                                              fontSize: ScreenSizes.isMeduimScreen(
+                                                      context)
+                                                  ? 6.5.sp
+                                                  : 13.sp,
+                                            )),
+                                        style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.all(
+                                              ScreenSizes.isMeduimScreen(context)
+                                                  ? 5.sp
+                                                  : 9.sp,
+                                            ),
+                                            backgroundColor: AppColors.darkOrange,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15))),
+                                      )
                               ],
-                            ),
-                          )
-                        ],
-                      ),
+                            )
+                          : SizedBox(),
                       SizedBox(
                         height: 10.sp,
                       ),
@@ -536,7 +540,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           ),
                           Expanded(child: SizedBox()),
-                          Text("${widget.Price} Rs",
+                          Text("${widget.fullPrice} Rs",
                               style: TextStyle(
                                 fontFamily: 'met',
                                 fontSize: ScreenSizes.isMeduimScreen(context)
@@ -547,26 +551,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             width: 5.sp,
                           ),
                           Container(
-                            height: ScreenSizes.isMeduimScreen(context)
-                                ? 15.sp
-                                : 25.sp,
-                            width: ScreenSizes.isMeduimScreen(context)
-                                ? 35.sp
-                                : 65.sp,
+                            height:
+                                ScreenSizes.isMeduimScreen(context) ? 15.sp : 25.sp,
+                            width:
+                                ScreenSizes.isMeduimScreen(context) ? 35.sp : 65.sp,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(23),
                                 color: AppColors.darkOrange),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Icon(
-                                  FontAwesomeIcons.minus,
-                                  color: AppColors.textColorWhite,
-                                  size: ScreenSizes.isMeduimScreen(context)
-                                      ? 8.sp
-                                      : 14.sp,
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (fullItemQuantity > 0) {
+                                        fullItemQuantity--;
+                                      }
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.minus,
+                                    color: AppColors.textColorWhite,
+                                    size: ScreenSizes.isMeduimScreen(context)
+                                        ? 8.sp
+                                        : 14.sp,
+                                  ),
                                 ),
-                                Text("0",
+                                Text(fullItemQuantity.toString(),
                                     style: TextStyle(
                                         fontFamily: 'met',
                                         fontSize:
@@ -574,62 +585,77 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                 ? 8.sp
                                                 : 14.sp,
                                         color: AppColors.textColorWhite)),
-                                Icon(
-                                  FontAwesomeIcons.plus,
-                                  color: AppColors.textColorWhite,
-                                  size: ScreenSizes.isMeduimScreen(context)
-                                      ? 8.sp
-                                      : 14.sp,
+                                InkWell(
+                                  onTap: () {
+                                    fullItemQuantity++;
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.plus,
+                                    color: AppColors.textColorWhite,
+                                    size: ScreenSizes.isMeduimScreen(context)
+                                        ? 8.sp
+                                        : 14.sp,
+                                  ),
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              width: 20.sp,
+                            ),
+                          ),
+                          fullItemQuantity == 0
+                              ? Expanded(child: Container())
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    cartBloc!.add(
+                                        AddToCartEvent(
+                                            widget.products![widget.index!].id!,
+                                            int.parse(widget
+                                                .products![widget.index!]
+                                                .fullPrice!),
+                                            fullItemQuantity,
+                                            int.parse(widget
+                                                .products![widget.index!]
+                                                .categoryId!),
+                                            int.parse(widget
+                                                .products![widget.index!]
+                                                .resturantId!),
+                                            widget.products![widget.index!].type!,
+                                            'Full',widget.token));
+                                  },
+                                  child: Text("Add to cart",
+                                      style: TextStyle(
+                                        fontFamily: 'met',
+                                        fontSize:
+                                            ScreenSizes.isMeduimScreen(context)
+                                                ? 6.5.sp
+                                                : 10.sp,
+                                      )),
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 5.sp
+                                            : 9.sp,
+                                      ),
+                                      backgroundColor: AppColors.darkOrange,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15))),
+                                )
                         ],
                       ),
                       SizedBox(
-                        height:
-                            ScreenSizes.isMeduimScreen(context) ? 8.sp : 13.sp,
+                        height: ScreenSizes.isMeduimScreen(context) ? 8.sp : 13.sp,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<CartBloc>(context).add(AddToCartEvent(
-                              widget.products![widget.index!].id!,
-                              int.parse(
-                                  widget.products![widget.index!].fullPrice!),
-                              updateQuantity[widget.index!].itemQuantity!,
-                              int.parse(
-                                  widget.products![widget.index!].categoryId!),
-                              int.parse(
-                                  widget.products![widget.index!].resturantId!),
-                              widget.products![widget.index!].type!,
-                              widget.products![widget.index!].isHalf == 0
-                                  ? "Half"
-                                  : "Full"));
-                        },
-                        child: Text("Add to cart",
-                            style: TextStyle(
-                              fontFamily: 'met',
-                              fontSize: ScreenSizes.isMeduimScreen(context)
-                                  ? 8.sp
-                                  : 13.sp,
-                            )),
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(
-                              ScreenSizes.isMeduimScreen(context) ? 5.sp : 9.sp,
-                            ),
-                            backgroundColor: AppColors.darkOrange,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15))),
-                      )
                     ],
                   ),
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(28))),
-              );
-            }
-            throw Error().stackTrace.toString();
-          }
+              ),
+            
+            ],
           );
         });
   }

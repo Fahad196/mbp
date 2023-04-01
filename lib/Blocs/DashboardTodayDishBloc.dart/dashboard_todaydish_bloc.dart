@@ -15,13 +15,14 @@ class DashboardTodayDishBloc
         (event, emit) => emit(DashboardTodayDishLoadingState()));
     on<DashboardTodayDishLoadedEvent>((event, emit)async {
     
-      var data = await repository.getTodayDish(event.id);
+      var data = await repository.getTodayDish(event.resId,event.token);
+  
      
       try {
         emit(DashboardTodayDishLoadedstate(data));
       
       } catch (e) {
-      
+      print(e);
         throw e.toString();
       }
     });

@@ -11,7 +11,7 @@ class DashboardMenuBloc extends Bloc<DashboardMenuEvent, DashboardMenuState> {
     on<DashboardMenuLoadingEvent>(
         (event, emit) => emit(DashboardMenuLoadingState()));
     on<DashboardMenuLoadedEvent>((event, emit)async {
-      final data = await repository.getMenu(event.id);
+      final data = await repository.getMenu(event.id,event.token);
       try {
         emit(DashboardMenuLoadedstate(data));
       } catch (e) {

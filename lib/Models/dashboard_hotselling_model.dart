@@ -1,5 +1,5 @@
 class DashboardHotSellingModel {
- final String? itemId;
+ final int? id;
  final String? isHalf;
  final String? fullPrice;
  final String? halfPrice;
@@ -12,7 +12,7 @@ final  String? itemDesp;
 final  String? resturantId;
 
   DashboardHotSellingModel(
-      {this.itemId,
+      {this.id,
       this.isHalf,
       this.fullPrice,
       this.halfPrice,
@@ -26,7 +26,7 @@ final  String? resturantId;
 
   factory DashboardHotSellingModel.fromJson(Map<String, dynamic> json) {
     return DashboardHotSellingModel(
-      itemId: json['item_id'],
+      id: json['id'],
       isHalf: json['isHalf'],
       fullPrice: json['full_price'],
       halfPrice: json['half_price'],
@@ -42,7 +42,7 @@ final  String? resturantId;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_id'] = this.itemId;
+    data['id'] = this.id;
     data['isHalf'] = this.isHalf;
     data['full_price'] = this.fullPrice;
     data['half_price'] = this.halfPrice;

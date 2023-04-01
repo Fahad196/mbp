@@ -12,7 +12,8 @@ class StartEvent extends TableEvent {}
 
 class TableLoadedEvent extends TableEvent {
   int id ;
-  TableLoadedEvent(this.id);
+  String token;
+  TableLoadedEvent({required this.id,required this.token});
 }
 
 class FinalSelectionEvent extends TableEvent {

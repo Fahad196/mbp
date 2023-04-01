@@ -1,29 +1,43 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unnecessary_string_interpolations
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mybigplate/Blocs/CartBloc/cart_bloc.dart';
-import 'package:mybigplate/Blocs/CartBloc/cart_state.dart';
 import 'package:mybigplate/Blocs/CartViewBloc/cart_view_bloc.dart';
 import 'package:mybigplate/Blocs/CartViewBloc/cart_view_event.dart';
 import 'package:mybigplate/Blocs/CartViewBloc/cart_view_state.dart';
+import 'package:mybigplate/Blocs/DeleteCartBloc/delete_cart_event.dart';
+import 'package:mybigplate/Blocs/UpdateQuantityCartBloc/update_quantity_cart_bloc.dart';
+import 'package:mybigplate/Blocs/UpdateQuantityCartBloc/update_quantity_cart_event.dart';
 import 'package:mybigplate/Models/cart_view_model.dart';
 import 'package:mybigplate/Screens/order_summary_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/my_icons.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+import '../Blocs/DeleteCartBloc/delete_cart_bloc.dart';
+
+class CartScreen extends StatefulWidget {
+  final String token;
+  CartScreen(this.token);
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<CartViewBloc>(context)
+        .add(CartViewLoadedEvent(widget.token));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CartViewBloc>(context).add(CartViewLoadedEvent());
     return Scaffold(
         appBar: AppBar(
           title: Text("Cart"),
@@ -38,16 +52,18 @@ class CartScreen extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        body: BlocBuilder<CartViewBloc, CartViewState>(builder: (context, state) {
+        body:
+            BlocBuilder<CartViewBloc, CartViewState>(builder: (context, state) {
           if (state is CartViewErrorState) {
             return Text("somthing went wrong");
           } else if (state is CartViewLoadingState) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: AppColors.darkOrange,
+              ),
             );
           } else if (state is CartViewLoadedState) {
-            List<CartViewModel> cartList=state.listOfCartItems;
-            log(cartList.toString());
+            List<CartViewModel> cartList = state.listOfCartItems;
             return Column(
               children: [
                 Expanded(
@@ -66,7 +82,15 @@ class CartScreen extends StatelessWidget {
                                     bottomLeft: Radius.circular(25),
                                   ),
                                   backgroundColor: Colors.red.withOpacity(0.5),
-                                  onPressed: ((context) => {}),
+                                  onPressed: ((context) => {
+                                        BlocProvider.of<DeleteCartBloc>(context)
+                                            .add(DeleteItemCartEvent(
+                                                cartList[index].id!,
+                                                int.parse(cartList[index]
+                                                    .resturantId!),
+                                                cartList[index].portion!,
+                                                widget.token))
+                                      }),
                                 ),
                               ]),
                           child: Container(
@@ -171,13 +195,47 @@ class CartScreen extends StatelessWidget {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                Icon(
-                                                  FontAwesomeIcons.minus,
-                                                  color:
-                                                      AppColors.textColorWhite,
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      log(cartList[index]
+                                                          .itemQuantity
+                                                          .toString());
+                                                      var q = int.parse(
+                                                          cartList[index]
+                                                              .itemQuantity!);
+                                                      (q--);
+                                                      BlocProvider.of<
+                                                                  UpdateQuantityCartBloc>(
+                                                              context)
+                                                          .add(UpdateItemQuantityCartEvent(
+                                                              cartId:
+                                                                  cartList[index]
+                                                                      .id!,
+                                                              itemPrice: int.parse(
+                                                                  cartList[
+                                                                          index]
+                                                                      .itemPrice!),
+                                                              itemQuantity: q,
+                                                              resturantId: int.parse(
+                                                                  cartList[index]
+                                                                      .resturantId!),
+                                                              portion: cartList[
+                                                                      index]
+                                                                  .portion!,
+                                                              token: widget
+                                                                  .token));
+                                                      log("q::::::::$q");
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    FontAwesomeIcons.minus,
+                                                    color: AppColors
+                                                        .textColorWhite,
+                                                  ),
                                                 ),
                                                 Text(
-                                                   cartList[index].itemQuantity.toString(),
+                                                  cartList[index].itemQuantity!,
                                                   style: TextStyle(
                                                       fontFamily: 'met',
                                                       fontSize: ScreenSizes
@@ -188,17 +246,48 @@ class CartScreen extends StatelessWidget {
                                                       color: AppColors
                                                           .textColorWhite),
                                                 ),
-                                                Icon(
-                                                  FontAwesomeIcons.plus,
-                                                  color:
-                                                      AppColors.textColorWhite,
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      var q = int.parse(
+                                                          cartList[index]
+                                                              .itemQuantity!);
+                                                    q++;
+                                                      BlocProvider.of<UpdateQuantityCartBloc>(
+                                                              context)
+                                                          .add(UpdateItemQuantityCartEvent(
+                                                              cartId:
+                                                                  cartList[index]
+                                                                      .id!,
+                                                              itemPrice: int
+                                                                  .parse(
+                                                                      cartList[index]
+                                                                          .itemPrice!),
+                                                              itemQuantity: q,
+                                                              resturantId:
+                                                                  int.parse(cartList[
+                                                                          index]
+                                                                      .resturantId!),
+                                                              portion: cartList[
+                                                                      index]
+                                                                  .portion
+                                                                  .toString(),
+                                                              token: widget
+                                                                  .token));
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    FontAwesomeIcons.plus,
+                                                    color: AppColors
+                                                        .textColorWhite,
+                                                  ),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           Expanded(child: SizedBox()),
                                           Text(
-                                            "400Rs",
+                                            "${cartList[index].itemPriceTotal}Rs",
                                             style: TextStyle(
                                               fontFamily: 'met',
                                               fontSize:

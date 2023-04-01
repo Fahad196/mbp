@@ -10,8 +10,9 @@ class DeleteCartLoadingEvent extends DeleteCartEvent{
 
 }
 class DeleteItemCartEvent extends DeleteCartEvent{
-  int itemId;
-  int resturantId;
-  String portion;
-DeleteItemCartEvent(this.itemId,this.resturantId,this.portion);
+ final int cartId;
+ final int resturantId;
+ final String portion;
+ final String token;
+DeleteItemCartEvent(this.cartId,this.resturantId,this.portion,this.token);
 }

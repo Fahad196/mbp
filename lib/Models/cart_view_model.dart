@@ -1,14 +1,13 @@
-// ignore_for_file: unnecessary_this
-
 class CartViewModel {
-  String? type;
-  String? portion;
-  String? itemName;
-  String? itemImage;
-  String? itemPrice;
-  String? itemPriceTotal;
-  String? itemQuantity;
-  int? itemId;
+ final String? type;
+ final String? portion;
+ final String? itemName;
+ final String? itemImage;
+ final String? itemPrice;
+ final String? itemPriceTotal;
+ final String? itemQuantity;
+ final String? resturantId;
+ final int? id;
 
   CartViewModel(
       {this.type,
@@ -18,18 +17,20 @@ class CartViewModel {
       this.itemPrice,
       this.itemPriceTotal,
       this.itemQuantity,
-      this.itemId});
+      this.resturantId,
+      this.id});
 
-  factory CartViewModel.fromJson(Map<String, dynamic> json) {
+   factory CartViewModel.fromJson(Map<String, dynamic> json) {
     return CartViewModel(
-      type: json['type'],
-      portion: json['portion'],
-      itemName: json['item_name'],
-      itemImage: json['item_image'],
-      itemPrice: json['item_price'],
-      itemPriceTotal: json['item_price_total'],
-      itemQuantity: json['item_quantity'],
-      itemId: json['id'],
+      type : json['type'],
+    portion : json['portion'],
+    itemName : json['item_name'],
+    itemImage : json['item_image'],
+    itemPrice : json['item_price'],
+    itemPriceTotal : json['item_price_total'],
+    itemQuantity : json['item_quantity'],
+    resturantId : json['resturant_id'],
+    id : json['id'],
     );
   }
 
@@ -42,7 +43,8 @@ class CartViewModel {
     data['item_price'] = this.itemPrice;
     data['item_price_total'] = this.itemPriceTotal;
     data['item_quantity'] = this.itemQuantity;
-    data['id'] = this.itemId;
+    data['resturant_id'] = this.resturantId;
+    data['id'] = this.id;
     return data;
   }
 }

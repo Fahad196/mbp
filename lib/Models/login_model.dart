@@ -1,19 +1,25 @@
 class LoginModel {
-  final String JwtToken;
-  final String FirstName;
+  final String? accessToken;
+ final String? tokenType;
+ final int? expiresIn;
 
-  const LoginModel({
-    required this.JwtToken,
-    required this.FirstName,
-  });
+  LoginModel({this.accessToken, this.tokenType, this.expiresIn,});
 
-  Map<String, dynamic> toJson() =>
-      {"firstName": FirstName, "JwtToken": JwtToken};
+ factory LoginModel.fromJson(Map<String, dynamic> json) {
+   return LoginModel(
+ accessToken : json['access_token'],
+    tokenType : json['token_type'],
+    expiresIn : json['expires_in'],
+   );
+   
+  }
 
-  factory LoginModel.fromJson(Map<String, dynamic> json) {
-    return LoginModel(
-      JwtToken: json['JwtToken'],
-      FirstName: json['firstName'],
-    );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    data['access_token'] = this.accessToken;
+    data['token_type'] = this.tokenType;
+    data['expires_in'] = this.expiresIn;
+    return data;
   }
 }
+

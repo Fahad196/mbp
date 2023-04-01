@@ -9,5 +9,6 @@ import 'package:equatable/equatable.dart';
 class DashboardMenuLoadingEvent extends DashboardMenuEvent{}
 class DashboardMenuLoadedEvent extends DashboardMenuEvent{
  final int id;
- DashboardMenuLoadedEvent(this.id);
+ String token;
+ DashboardMenuLoadedEvent(this.id,this.token);
 }

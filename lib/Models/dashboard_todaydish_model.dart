@@ -1,5 +1,5 @@
 class DashboardTodayDishModel {
-  String? itemId;
+  int? id;
   String? isHalf;
   String? fullPrice;
   Null? halfPrice;
@@ -12,7 +12,7 @@ class DashboardTodayDishModel {
   String? resturantId;
 
   DashboardTodayDishModel(
-      {this.itemId,
+      {this.id,
       this.isHalf,
       this.fullPrice,
       this.halfPrice,
@@ -26,7 +26,7 @@ class DashboardTodayDishModel {
 
   factory DashboardTodayDishModel.fromJson(Map<String, dynamic> json) {
     return DashboardTodayDishModel(
-      itemId: json['item_id'],
+      id: json['id'],
       isHalf: json['isHalf'],
       fullPrice: json['full_price'],
       halfPrice: json['half_price'],
@@ -42,7 +42,7 @@ class DashboardTodayDishModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_id'] = this.itemId;
+    data['id'] = this.id;
     data['isHalf'] = this.isHalf;
     data['full_price'] = this.fullPrice;
     data['half_price'] = this.halfPrice;

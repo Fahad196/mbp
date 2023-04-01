@@ -7,5 +7,6 @@ abstract class CartViewEvent extends Equatable{
 
 class CartViewLoadingEvent extends CartViewEvent{}
 class CartViewLoadedEvent extends CartViewEvent{
-  
+  final String token;
+  CartViewLoadedEvent(this.token);
 }

@@ -10,6 +10,7 @@ class FoodCategoryLoadingEvent extends FoodCategoryEvent{}
 class FoodCategoryLoadedEvent extends FoodCategoryEvent{
  final int resId;
  final int catId;
-  FoodCategoryLoadedEvent(this.resId, this.catId);
+ final String token ;
+  FoodCategoryLoadedEvent(this.resId, this.catId,this.token);
 
 }

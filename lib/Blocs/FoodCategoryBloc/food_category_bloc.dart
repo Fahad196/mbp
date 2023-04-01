@@ -14,7 +14,7 @@ class FoodCategoryBloc extends Bloc<FoodCategoryEvent, FoodCategoryState> {
     on<FoodCategoryLoadingEvent>(
         (event, emit) => emit(FoodCategoryLoadingState()));
     on<FoodCategoryLoadedEvent>((event, emit) async {
-      final products = await repository.getCatogories(event.resId, event.catId);
+      final products = await repository.getCatogories(event.resId, event.catId,event.token);
      // log("products::::::::::::::::::::::::::::: $products");
       try {
         if (products.where((element) => element.categoryId==event.catId && element.resturantId == event.resId).isEmpty) {

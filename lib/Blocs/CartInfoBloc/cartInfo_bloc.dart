@@ -16,7 +16,7 @@ class CartInfoBloc extends Bloc<CartInfoEvent, CartInfoState> {
     on<CartInfoSuccessfulEvent>((event, emit) async {
       try {
         final data = await repository.getTableInfo(
-            event.tableNo, event.totalGuest, event.resturantId);
+            event.tableNo, event.totalGuest, event.resturantId,event.token);
 
         if (data.message == 'Table Booked Successfully') {
           emit(CartInfoSuccessfulstate());

@@ -1,23 +1,23 @@
 // ignore_for_file: unnecessary_this
 
 class DeleteCartModel {
-  int? itemId;
+  int? cartId;
   int? resturantId;
   String? portion;
 
-  DeleteCartModel({this.itemId, this.resturantId, this.portion});
+  DeleteCartModel({this.cartId, this.resturantId, this.portion});
 
   factory DeleteCartModel.fromJson(Map<String, dynamic> json) {
     return DeleteCartModel(
-      itemId: json['item_id'],
+      cartId: json['cartid'],
       resturantId: json['resturant_id'],
       portion: json['portion'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_id'] = this.itemId;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['cartid'] = this.cartId;
     data['resturant_id'] = this.resturantId;
     data['portion'] = this.portion;
     return data;

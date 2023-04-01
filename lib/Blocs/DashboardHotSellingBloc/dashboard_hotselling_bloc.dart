@@ -12,7 +12,7 @@ class DashboardHotSellingBloc
         (event, emit) => emit(DashboardHotSellingLoadingState()));
     on<DashboardHotSellingLoadedEvent>((event, emit)async {
     
-      var data = await repository.getHotSellings(event.id);
+      var data = await repository.getHotSellings(event.id,event.token);
       try {
         emit(DashboardHotSellingLoadedstate(data));
       

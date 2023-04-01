@@ -13,7 +13,7 @@ class ResturantBloc extends Bloc<ResturantEvent, ResturantState> {
   ResturantBloc(this.repository) : super(ResturantLoadingState()) {
     on<ResturantLoadEvent>((event, emit) async {
       try {
-        final resturant = await repository.getResturants();
+        final resturant = await repository.getResturants(event.token);
         emit(ResturantLoadedState(resturants: resturant));
       } catch (e) {
         emit(ResturantErrorState(message: e.toString()));

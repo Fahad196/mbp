@@ -8,8 +8,8 @@ class UpdateQuantityCartState extends Equatable{
 }
 class UpdateQuantityCartLoadingState extends UpdateQuantityCartState{}
 class UpdateItemQuantityCartState extends UpdateQuantityCartState{
-  List<UpdateQuantityCartModel> quantityList;
-  UpdateItemQuantityCartState(this.quantityList);
+  UpdateQuantityCartModel quantityCartModel;
+  UpdateItemQuantityCartState({required this.quantityCartModel});
 }
 class UpdateQuantityCartErrorState extends UpdateQuantityCartState{
   String message;

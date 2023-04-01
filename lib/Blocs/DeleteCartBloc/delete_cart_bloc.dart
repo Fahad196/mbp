@@ -11,7 +11,7 @@ class DeleteCartBloc extends Bloc<DeleteCartEvent, DeleteCartState> {
     on<DeleteCartLoadingEvent>((event, emit) => emit(DeleteCartLoadingState()));
     on<DeleteItemCartEvent>((event, emit) {
       var data = repository.deleteCartItems(
-          event.itemId, event.resturantId, event.portion);
+          event.cartId, event.resturantId, event.portion,event.token);
       try {
         emit(DeleteItemCartState());
       } catch (e) {

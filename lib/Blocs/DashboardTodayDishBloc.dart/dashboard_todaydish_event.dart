@@ -8,6 +8,7 @@ class DashboardTodayDishEvent extends Equatable {
 class DashboardTodayDishLoadingEvent extends DashboardTodayDishEvent {}
 
 class DashboardTodayDishLoadedEvent extends DashboardTodayDishEvent {
-  final int id;
- DashboardTodayDishLoadedEvent(this.id);
+  final int resId;
+  String token;
+ DashboardTodayDishLoadedEvent(this.resId,this.token);
 }

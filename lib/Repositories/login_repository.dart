@@ -5,12 +5,13 @@ import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:mybigplate/Models/login_model.dart';
 
 class LoginRepository {
   static const endPoint = "https://laravel.artclients.in/api/auth/login";
   //http://192.168.29.210/my-big-plate-api/login
 
-  LogingIn(String email, String password) async {
+  Future<LoginModel> LogingIn(String email, String password) async {
     try {
       Uri uri = Uri.parse(endPoint);
       var response = await http.post(
@@ -26,10 +27,10 @@ class LoginRepository {
       if (response.statusCode == 200) {
       
         final jsonResponse = jsonDecode(response.body);
-   
-        return jsonResponse;
+         var d =LoginModel.fromJson(jsonResponse);
+        return d;
       } else {
-        print("please register");
+        throw Exception("Not a valid user");
       }
     } catch (e) {
       throw e.toString();

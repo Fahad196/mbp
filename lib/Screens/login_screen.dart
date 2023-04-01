@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResturantScreen(),
+                  builder: (context) => ResturantScreen(token: state.token,),
                 ));
                 print("tokennnnnnnnnnnnnnn: ${state.token}");
           }
