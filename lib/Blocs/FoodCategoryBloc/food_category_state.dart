@@ -14,6 +14,8 @@ class FoodCategoryLoadingState extends FoodCategoryState {}
 class FoodCategoryLoadedstate extends FoodCategoryState {
   List<FoodCategoryModel> hotSellingList;
   FoodCategoryLoadedstate(this.hotSellingList);
+  @override
+  List<Object?> get props => [hotSellingList];
 }
 
 class FoodCategoryErrorState extends FoodCategoryState {

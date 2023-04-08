@@ -12,7 +12,7 @@ class CartViewBloc extends Bloc<CartViewEvent, CartViewState> {
     on<CartViewLoadingEvent>((event, emit) => emit(CartViewLoadingState()));
     on<CartViewLoadedEvent>((event, emit) async{
       try {
-        var data =await respository.getCartList(event.token);
+        var data =await respository.getCartList(event.token,event.resId);
       log("Data ::::::::::$data");
         emit(CartViewLoadedState(data));
       } catch (e) {

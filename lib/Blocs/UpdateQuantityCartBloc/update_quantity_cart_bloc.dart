@@ -21,11 +21,9 @@ class UpdateQuantityCartBloc
             event.itemQuantity,
             event.resturantId,
             event.portion,event.token);
-        if (data.message =="Item Updated Successfully") {
+        
           emit(UpdateItemQuantityCartState(quantityCartModel: data));
-        } else {
-          emit(UpdateQuantityCartErrorState("something went wrong"));
-        }
+       
       } catch (e) {
         log(e.toString());
         emit(UpdateQuantityCartErrorState(e.toString()));

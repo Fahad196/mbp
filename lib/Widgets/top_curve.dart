@@ -8,12 +8,12 @@ class CustomTopBar extends CustomClipper<Path> {
   getClip(Size size) {
   
     var path = new Path();
-    path.lineTo(0, size.height / 3.20);
-    var firstControlPoint = new Offset(size.width / 4, size.height / 3);
-    var firstEndPoint = new Offset(size.width / 2, size.height / 3 - 45);
+    path.lineTo(0, size.height / 2);
+    var firstControlPoint = new Offset(size.width / 6, size.height / 3);
+    var firstEndPoint = new Offset(size.width / 1, size.height / 3 - 45);
     var secondControlPoint =
     new Offset(size.width - (size.width / 4), size.height / 4 - 30);
-    var secondEndPoint = new Offset(size.width/1, size.height / 3 - 19);
+    var secondEndPoint = new Offset(size.width/1, size.height / 3 - 45);
     path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
         firstEndPoint.dx, firstEndPoint.dy);
     path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,

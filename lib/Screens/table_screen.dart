@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, deprecated_member_use, unnecessary_overrides, unnecessary_brace_in_string_interps, prefer_if_null_operators, avoid_print
 
-import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +12,6 @@ import 'package:mybigplate/Blocs/TableBloc/table_bloc.dart';
 import 'package:mybigplate/Blocs/TableBloc/table_event.dart';
 import 'package:mybigplate/Blocs/TableBloc/table_state.dart';
 import 'package:mybigplate/Models/table_model.dart';
-import 'package:mybigplate/Repositories/table_repository.dart';
 import 'package:mybigplate/Screens/dashboard_screen.dart';
 import '../Blocs/CartInfoBloc/cartInfo_event.dart';
 import '../Util/colors.dart';
@@ -24,7 +23,7 @@ class TableScreen extends StatefulWidget {
   int? id;
   int index;
   String token;
-  TableScreen(this.id, this.index,this.token);
+  TableScreen(this.id, this.index, this.token);
 
   @override
   State<TableScreen> createState() => _TableScreenState();
@@ -36,14 +35,14 @@ class _TableScreenState extends State<TableScreen> {
   CartInfoBloc? cartInfoBloc;
   @override
   void initState() {
-   
-    BlocProvider.of<TableBloc>(context).add(TableLoadedEvent(id:widget.id ?? 404, token: widget.token));
+    BlocProvider.of<TableBloc>(context)
+        .add(TableLoadedEvent(id: widget.id ?? 404, token: widget.token));
     cartInfoBloc = BlocProvider.of<CartInfoBloc>(context);
     super.initState();
   }
 
-   String? dropdownvalue;
-  
+  String? dropdownvalue;
+
   final TextEditingController noOfGuest = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -62,14 +61,14 @@ class _TableScreenState extends State<TableScreen> {
           );
         } else if (state is TableLoadedState) {
           List<TableModel> tableList = state.tables;
-       
+
           return SafeArea(
             child: Stack(
               children: [
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
-                      height: 380.sp,
+                      height: 300.sp,
                       width: double.infinity,
                       child: ClipPath(
                         clipper: CustomTopBar(),
@@ -81,7 +80,7 @@ class _TableScreenState extends State<TableScreen> {
                     child: IconButton(
                       icon: Icon(
                         Icons.arrow_back,
-                        size: 24.sp,
+                        size: 15.sp,
                         color: Colors.white,
                       ),
                       onPressed: () {
@@ -108,11 +107,9 @@ class _TableScreenState extends State<TableScreen> {
                               fontFamily: 'met'),
                         ),
                       ),
-                     
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 3,
                       ),
-
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.textColorWhite,
@@ -157,10 +154,8 @@ class _TableScreenState extends State<TableScreen> {
                                   fontFamily: 'met'),
                             ),
                             items: tableList.map((list) {
-                              
                               return DropdownMenuItem(
-                                value: list.id.toString(),
-                              
+                                value: list.tableNo.toString(),
                                 child: Text(
                                   'Table No : ${list.tableNo}',
                                   style: TextStyle(
@@ -172,12 +167,10 @@ class _TableScreenState extends State<TableScreen> {
                                       fontFamily: 'met'),
                                 ),
                               );
-                              
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
                                 dropdownvalue = value.toString();
-                              
                               });
                             },
                           ),
@@ -251,13 +244,15 @@ class _TableScreenState extends State<TableScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DashboardScreen(id: widget.id!, index:widget.index,token:widget.token),
+                    builder: (context) => DashboardScreen(
+                        id: widget.id!,
+                        index: widget.index,
+                        token: widget.token),
                   ));
-
             }
           },
           child: Container(
-            height: 93.sp,
+            height: ScreenSizes.isMeduimScreen(context) ? 75.sp : 93.sp,
             child: CustomPaint(
               painter: CustomsBottomBar(),
               child: Column(
@@ -314,8 +309,7 @@ class _TableScreenState extends State<TableScreen> {
                               int.parse(dropdownvalue!),
                               int.parse(noOfGuest.text),
                               int.parse(widget.id.toString()),
-                              widget.token
-                              ));
+                              widget.token));
                         }
                       },
                       style: ElevatedButton.styleFrom(

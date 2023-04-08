@@ -10,6 +10,8 @@ class UpdateQuantityCartLoadingState extends UpdateQuantityCartState{}
 class UpdateItemQuantityCartState extends UpdateQuantityCartState{
   UpdateQuantityCartModel quantityCartModel;
   UpdateItemQuantityCartState({required this.quantityCartModel});
+  @override
+  List<Object?> get props => [quantityCartModel];
 }
 class UpdateQuantityCartErrorState extends UpdateQuantityCartState{
   String message;

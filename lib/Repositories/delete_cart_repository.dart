@@ -27,7 +27,7 @@ class DeleteCartRepository {
       //log("response body :::::::: ${response.body}");
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        //log("jsonResponse :::::::::::::$jsonResponse");
+        log("jsonResponse :::::::::::::$jsonResponse");
         var d = DeleteCartModel.fromJson(jsonResponse);
       //  log("d :::::::::$d");
         return;

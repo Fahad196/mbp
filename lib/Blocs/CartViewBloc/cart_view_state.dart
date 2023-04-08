@@ -11,6 +11,8 @@ class CartViewLoadingState extends CartViewState {}
 class CartViewLoadedState extends CartViewState{
   List<CartViewModel> listOfCartItems;
   CartViewLoadedState(this.listOfCartItems);
+@override
+  List<Object?> get props => [listOfCartItems];
 }
 class CartViewErrorState extends CartViewState{
   final String message;

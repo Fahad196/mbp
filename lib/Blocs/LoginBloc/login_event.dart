@@ -13,3 +13,4 @@ class LoginButtonPressedEvent extends LoginEvent{
   final String password;
   LoginButtonPressedEvent(this.email,this.password);
 }
+

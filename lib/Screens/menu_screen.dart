@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mybigplate/Models/dashboard_menu_model.dart';
 
 import '../Util/colors.dart';
 import 'food_category_screen.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key});
-
+   MenuScreen({super.key, required this.dashboardMenuModel,required this.categoryName,required this.token});
+List<DashboardMenuModel> dashboardMenuModel;
+final String categoryName;
+final String token;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +40,7 @@ class MenuScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => FoodCategoryScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder:(context) => FoodCategoryScreen(categoryId: dashboardMenuModel[index].id,categoryName: categoryName,resId:int.parse( dashboardMenuModel[index].resturantId!),token: token ,index: index,)));
               },
               child: Container(
                 margin: EdgeInsets.all(10),
@@ -68,12 +71,12 @@ class MenuScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Pizza",
+                           dashboardMenuModel[index].categoryName! ,
                             style: TextStyle(fontFamily: 'met', fontSize: 10.sp),
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder:(context) => FoodCategoryScreen(),));
+                            Navigator.push(context, MaterialPageRoute(builder:(context) => FoodCategoryScreen(categoryId: dashboardMenuModel[index].id,categoryName: categoryName,resId:int.parse( dashboardMenuModel[index].resturantId!),token: token ,index: index,)));
                             },
                             child: Container(
                               padding: EdgeInsets.all(5),
@@ -95,7 +98,7 @@ class MenuScreen extends StatelessWidget {
               ),
             );
           },
-          itemCount: 20,
+          itemCount: dashboardMenuModel.length,
         ),
       ),
     );

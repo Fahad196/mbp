@@ -9,11 +9,15 @@ class DeleteCartBloc extends Bloc<DeleteCartEvent, DeleteCartState> {
   DeleteCartRepository repository;
   DeleteCartBloc(this.repository) : super(DeleteCartLoadingState()) {
     on<DeleteCartLoadingEvent>((event, emit) => emit(DeleteCartLoadingState()));
-    on<DeleteItemCartEvent>((event, emit) {
-      var data = repository.deleteCartItems(
-          event.cartId, event.resturantId, event.portion,event.token);
+    on<DeleteItemCartEvent>((event, emit) async {
+      var data = await repository.deleteCartItems(
+          event.cartId, event.resturantId, event.portion, event.token);
       try {
-        emit(DeleteItemCartState());
+        if (data['message'] == "Item Delete") {
+          emit(DeleteItemCartState());
+        } else {
+          emit(DeleteCartErrorState("somthing went wrong"));
+        }
       } catch (e) {
         emit(DeleteCartErrorState(e.toString()));
       }
