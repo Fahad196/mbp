@@ -10,6 +10,7 @@ import 'package:mybigplate/Blocs/OrderSummaryBloc/order_summary_event.dart';
 import 'package:mybigplate/Blocs/OrderSummaryBloc/order_summary_state.dart';
 import 'package:mybigplate/Models/order_summary_model.dart';
 import 'package:mybigplate/Screens/order_deatail_screen.dart';
+import 'package:mybigplate/Screens/profile_screen.dart';
 import 'package:mybigplate/Screens/resturant_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
@@ -21,7 +22,8 @@ import 'login_screen.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   final String token;
-  OrderSummaryScreen({required this.token});
+
+  OrderSummaryScreen({required this.token,});
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<OrderSummaryBloc>(context)
@@ -40,29 +42,42 @@ class OrderSummaryScreen extends StatelessWidget {
                   height: ScreenSizes.isMeduimScreen(context) ? 10.sp : 15.sp),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ResturantScreen(
                                 token: token,
-                              )));
+                              )),
+                      (route) => false);
                 },
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Home",
-                    style: TextStyle(
-                        fontFamily: 'met',
-                        fontSize: ScreenSizes.isMeduimScreen(context)
-                            ? 10.sp
-                            : 15.sp),
-                  ),
+                child: Text(
+                  " Home",
+                  style: TextStyle(
+                      fontFamily: 'met',
+                      fontSize: ScreenSizes.isMeduimScreen(context)
+                          ? 10.sp
+                          : 15.sp),
                 ),
               ),
-              SizedBox(
+                            SizedBox(
                   height: ScreenSizes.isMeduimScreen(context) ? 10.sp : 15.sp),
-              SizedBox(
-                height: 10.sp,
+               GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                                token: token,
+                              
+                              )));
+                },
+                child: Text(
+                  " Profile",
+                  style: TextStyle(
+                      fontFamily: 'met',
+                      fontSize:
+                          ScreenSizes.isMeduimScreen(context) ? 10.sp : 15.sp),
+                ),
               ),
               Expanded(child: SizedBox()),
               Align(

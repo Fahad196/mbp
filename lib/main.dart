@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_local_variable, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'dart:developer';
 import 'dart:io';
@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: StartPage(),
+            home: LoginScreen(),
             debugShowCheckedModeBanner: false,
           ),
         );
@@ -132,31 +132,34 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   FlutterSecureStorage s = FlutterSecureStorage();
-  LoginBloc? loginBloc;
-   String? readToken;
+
+  String? readToken;
   @override
   void initState() {
-    loginBloc = BlocProvider.of<LoginBloc>(context);
-    readToken=saveToken.toString();
-    log("token::::::::$readToken");
+    getToken();
     super.initState();
   }
-  
-  get saveToken async {
-    final save = s.write(key: "token", value: loginBloc!.tokenn);
-   String? Token = await s.read(key: "token");
-    return Token;
+
+  getToken() async {
+    if (await s.containsKey(key: "token")) {
+      String? token = await s.read(key: "token");
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+            builder: (context) => ResturantScreen(
+                  token: token!,
+                )),
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-        body: readToken != null
-            ? ResturantScreen(
-                token: readToken.toString(),
-              )
-            : LoginScreen(),
-        resizeToAvoidBottomInset: false);
+    return Scaffold(body: SizedBox(), resizeToAvoidBottomInset: false);
   }
 }

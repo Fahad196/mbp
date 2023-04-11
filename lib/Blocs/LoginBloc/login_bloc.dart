@@ -12,25 +12,17 @@ import 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginRepository repository;
   var storage = FlutterSecureStorage();
-  String? tokenn;
+
   LoginBloc(this.repository) : super(LoginInitailState()) {
-    // log("yeh wala na ${tokenn.toString()}");
     on<StartEvent>((event, emit) => emit(LoginInitailState()));
     on<LoginButtonPressedEvent>((event, emit) async {
       emit(LoginLoadingState());
       var data = await repository.LogingIn(event.email, event.password);
-      
-        final token = storage.write(key: "token", value: data.accessToken);
-        final readToken = await storage.read(key: "token");
-        tokenn = readToken;
-       // log("yeh wala na ${tokenn.toString()}");
-      
-        if (data.accessToken != null) {
-          emit(LoginSuccess(token: readToken.toString()));
-        }
-
+      final token = storage.write(key: "token", value: data.accessToken);
+      final readToken = await storage.read(key: "token");
+      if (data.accessToken != null) {
+        emit(LoginSuccess(token: readToken.toString()));
       } 
-    );
+    });
   }
-
 }

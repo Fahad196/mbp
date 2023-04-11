@@ -11,6 +11,8 @@ class DashboardHotSellingLoadingState extends DashboardHotSellingState {}
 class DashboardHotSellingLoadedstate extends DashboardHotSellingState {
   List<DashboardHotSellingModel> hotSellingList;
   DashboardHotSellingLoadedstate(this.hotSellingList);
+  @override
+  List<Object?> get props => [hotSellingList];
 }
 
 class DashboardHotSellingErrorState extends DashboardHotSellingState {

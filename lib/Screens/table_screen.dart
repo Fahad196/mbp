@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/CartInfoBloc/cartInfo_bloc.dart';
 import 'package:mybigplate/Blocs/CartInfoBloc/cartInfo_state.dart';
@@ -51,13 +52,11 @@ class _TableScreenState extends State<TableScreen> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocBuilder<TableBloc, TableState>(builder: (context, state) {
-        if (state is TableErrorState) {
-          return AlertDialog(
-            content: Text("Somthing went wrong"),
-          );
-        } else if (state is TableLoadingState) {
+        if (state is TableLoadingState) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: AppColors.darkOrange,
+            ),
           );
         } else if (state is TableLoadedState) {
           List<TableModel> tableList = state.tables;
@@ -234,21 +233,35 @@ class _TableScreenState extends State<TableScreen> {
               ],
             ),
           );
-        } else {
-          return Center(child: Text("Somthing went wrong"));
         }
+        if (state is TableErrorState) {
+          return AlertDialog(
+            content: Text("Somthing went wrong"),
+          );
+        }
+        return SizedBox();
       }),
       bottomNavigationBar: BlocListener<CartInfoBloc, CartInfoState>(
           listener: (context, state) {
             if (state is CartInfoSuccessfulstate) {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => DashboardScreen(
                         id: widget.id!,
                         index: widget.index,
                         token: widget.token),
-                  ));
+                  ),
+                  (route) => false);
+
+                      Fluttertoast.showToast(
+                            msg: "Table Booked Successfully",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: AppColors.dividerColor,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
             }
           },
           child: Container(

@@ -1,21 +1,21 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings, must_be_immutable
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mybigplate/Models/dashboard_menu_model.dart';
-
 import '../Util/colors.dart';
 import 'food_category_screen.dart';
 
 class MenuScreen extends StatelessWidget {
-   MenuScreen({super.key, required this.dashboardMenuModel,required this.categoryName,required this.token});
+   MenuScreen({super.key, required this.dashboardMenuModel,required this.categoryName,required this.token,});
 List<DashboardMenuModel> dashboardMenuModel;
 final String categoryName;
 final String token;
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar:  AppBar(
         title: Text("Menu"),
@@ -57,10 +57,14 @@ final String token;
                 child: Column(
                   children: [
                     Expanded(
-                      child: Container(
-                          child: Image.asset(
-                        "assets/pizza/img3.png",
-                      )),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(6.sp),topRight: Radius.circular(6.sp)),
+                        child: Image.network(
+                          "http://laravel.artclients.in/storage/app/public/"+ dashboardMenuModel[index].imgPath.toString(),
+                        fit: BoxFit.fitWidth,
+                        width: double.infinity,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 5.sp,

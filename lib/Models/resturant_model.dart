@@ -1,22 +1,21 @@
 // ignore_for_file: unnecessary_this, prefer_collection_literals, prefer_typing_uninitialized_variables
 
-class ResturantModel{
- final int? resId;
- final  String? resturantName;
- final String? resturantImagePath;
- final String? status;
- 
+class ResturantModel {
+  final int? resId;
+  final String? resturantName;
+  final String? resturantImagePath;
 
-  ResturantModel(
-     { this.resId, this.resturantName, this.resturantImagePath, this.status,});
+  ResturantModel({
+    this.resId,
+    this.resturantName,
+    this.resturantImagePath,
+  });
 
- factory ResturantModel.fromJson(Map<String, dynamic> json) {
-   return ResturantModel(
-    resId : json['id'],
-    resturantName :json['resturant_name'],
-    resturantImagePath :json['img_path'],
-    status : json['status'],
-   
+  factory ResturantModel.fromJson(Map<String, dynamic> json) {
+    return ResturantModel(
+      resId: json['id'],
+      resturantName: json['resturant_name'],
+      resturantImagePath: json['img_path'],
     );
   }
 
@@ -25,7 +24,6 @@ class ResturantModel{
     data['res_id'] = this.resId;
     data['resturant_name'] = this.resturantName;
     data['resturant_image_path'] = this.resturantImagePath;
-    data['status'] = this.status;
     return data;
   }
 }

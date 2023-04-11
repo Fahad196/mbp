@@ -25,12 +25,14 @@ class LogoutRepository {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         var d = LogoutModel.fromJson(jsonResponse);
-       log("D:::::::::::$d");
+        log(d.toString());
         return d;
+        
       } else {
         throw Exception("Something went wrong");
       }
     } catch (e) {
+      log(e.toString());
       throw e.toString();
     }
   }

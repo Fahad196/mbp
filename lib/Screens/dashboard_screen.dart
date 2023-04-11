@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, sort_child_properties_last, unused_local_variable, unused_field, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, sort_child_properties_last, unused_local_variable, unused_field, prefer_final_fields, prefer_adjacent_string_concatenation
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_bloc.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_event.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_state.dart';
@@ -14,21 +13,13 @@ import 'package:mybigplate/Blocs/DashboardMenuBloc/dashboard_menu_event.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_bloc.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_event.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_state.dart';
-import 'package:mybigplate/Blocs/LogoutBloc/logout_bloc.dart';
-import 'package:mybigplate/Blocs/LogoutBloc/logout_event.dart';
-import 'package:mybigplate/Blocs/LogoutBloc/logout_state.dart';
 import 'package:mybigplate/Models/dashboard_hotselling_model.dart';
 import 'package:mybigplate/Models/dashboard_menu_model.dart';
 import 'package:mybigplate/Models/dashboard_todaydish_model.dart';
 import 'package:mybigplate/Screens/cart_screen.dart';
 import 'package:mybigplate/Screens/food_category_screen.dart';
-import 'package:mybigplate/Screens/login_screen.dart';
 import 'package:mybigplate/Screens/menu_screen.dart';
-import 'package:mybigplate/Screens/order_deatail_screen.dart';
-import 'package:mybigplate/Screens/order_summary_screen.dart';
 import 'package:mybigplate/Screens/product_detail_screen.dart';
-import 'package:mybigplate/Screens/profile_screen.dart';
-import 'package:mybigplate/Screens/tranfer_orders_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
 import '../Blocs/DashboardMenuBloc/dashboard_menu_state.dart';
@@ -197,7 +188,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartScreen(widget.token, widget.index,widget.id),
+                  builder: (context) =>
+                      CartScreen(widget.token, widget.index, widget.id),
                 ));
           },
           backgroundColor: AppColors.darkOrange,
@@ -207,67 +199,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-
-      //  BottomAppBar(
-      //   color: Colors.white,
-      //   child: SizedBox(
-      //     height: 93,
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           IconBottomBar(
-      //               text: " Cart",
-      //               icon: Icons.shopping_basket,
-      //               selected: _selectedIndex == 0,
-      //               onPressed: () {
-      //                 setState(() {
-      //                   _selectedIndex = 0;
-      //                 });
-      //                 Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) =>
-      //                           CartScreen(widget.token, widget.index),
-      //                     ));
-      //               }),
-      //           IconBottomBar(
-      //               text: "Orders",
-      //               icon: Icons.shopping_cart_rounded,
-      //               selected: _selectedIndex == 1,
-      //               onPressed: () {
-      //                 setState(() {
-      //                   _selectedIndex = 1;
-      //                 });
-      //                 Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) => OrderSummaryScreen( token: widget.token,),
-      //                     ));
-      //               }),
-      //           IconBottomBar(
-      //               text: "My Profile",
-      //               icon: Icons.person,
-      //               selected: _selectedIndex == 3,
-      //               onPressed: () {
-      //                 setState(() {
-      //                   _selectedIndex = 3;
-      //                 });
-      //                 Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) => ProfileScreen(
-      //                         token: widget.token,
-      //                         index: widget.index,
-      //                       ),
-      //                     ));
-      //               })
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 
@@ -280,10 +211,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return Text("somthing went wrong");
       } else if (state is DashboardMenuLoadingState) {
         return Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: AppColors.darkOrange,),
         );
       } else if (state is DashboardMenuLoadedstate) {
-        List<DashboardMenuModel> menu = state.hotSellingList;
+        List<DashboardMenuModel> menu = state.menu;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -325,8 +256,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           MaterialPageRoute(
                             builder: (context) => MenuScreen(
                               dashboardMenuModel: menu,
-                              categoryName: menu[index].categoryName!,
+                              categoryName: menu[index].categoryName.toString(),
                               token: widget.token,
+                            
                             ),
                           ));
                     },
@@ -383,7 +315,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
                                         image:
-                                            AssetImage("assets/pizza/img3.png"),
+                                            NetworkImage(  "http://laravel.artclients.in/storage/app/public/" + "${menu[index].imgPath}"),
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -481,14 +413,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   SizedBox hotSellings(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: ScreenSizes.isMeduimScreen(context) ? 125.sp : 141.sp,
+      height: ScreenSizes.isMeduimScreen(context) ? 110.sp : 141.sp,
       child: BlocBuilder<DashboardHotSellingBloc, DashboardHotSellingState>(
           builder: (context, state) {
         if (state is DashboardHotSellingErrorState) {
           return Text("something went wrong");
         } else if (state is DashboardHotSellingLoadingState) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: AppColors.darkOrange,),
           );
         } else if (state is DashboardHotSellingLoadedstate) {
           List<DashboardHotSellingModel> hotSellings = state.hotSellingList;
@@ -536,23 +468,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/barbique.png",
-                            height: ScreenSizes.isMeduimScreen(context)
-                                ? 80.sp
-                                : 100.sp,
-                            width: double.infinity,
-                            fit: BoxFit.fill,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.greenAccent,
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'Image not found',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              );
-                            },
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6.sp),topRight: Radius.circular(6.sp)),
+                            child: Image.network(
+                                "http://laravel.artclients.in/storage/app/public/"+"${hotSellings[index].itemImage}",
+                              height: ScreenSizes.isMeduimScreen(context)
+                                  ? 80.sp
+                                  : 100.sp,
+                              
+                              width: double.infinity,
+                              fit: BoxFit.fill,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.greenAccent,
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Image not found',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           // Spacer(),
                           SizedBox(
@@ -574,7 +510,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         fontFamily: 'met',
                                         fontSize:
                                             ScreenSizes.isMeduimScreen(context)
-                                                ? 8.sp
+                                                ? 7.5.sp
                                                 : 13.sp,
                                       )),
                                 ),
@@ -638,18 +574,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //--------------------------------------------TodayDishes-------------------------------------------------
   SizedBox todayDishes(BuildContext context) {
     return SizedBox(
-      height: ScreenSizes.isMeduimScreen(context) ? 90.sp : 120.sp,
+      height: ScreenSizes.isMeduimScreen(context) ? 94.sp : 120.sp,
       child: BlocBuilder<DashboardTodayDishBloc, DashboardTodayDishState>(
           builder: (context, state) {
         if (state is DashboardTodayDishErrorState) {
           return Text("Something went error");
         } else if (state is DashboardTodayDishLoadingState) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: AppColors.darkOrange,),
           );
         } else if (state is DashboardTodayDishLoadedstate) {
-          List<DashboardTodayDishModel> todayDish = state.hotSellingList;
-
+          List<DashboardTodayDishModel> todayDish = state.todayDish;
           return ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
@@ -679,13 +614,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: ScreenSizes.isMeduimScreen(context)
                               ? 80.sp
                               : 100.sp,
-                          child: Image.asset("assets/barbique.png")),
+                          child: ClipRRect(
+                             borderRadius: BorderRadius.circular(6.sp),
+                            child: Image.network(  "http://laravel.artclients.in/storage/app/public/"+"${todayDish[index].itemImage}"))),
+                          SizedBox(height: 3.sp,),
                       Text(
                         todayDish[index].itemName.toString(),
                         style: TextStyle(
                           fontFamily: 'met',
                           fontSize: ScreenSizes.isMeduimScreen(context)
-                              ? 8.sp
+                              ? 7.5.sp
                               : 13.sp,
                         ),
                       )
@@ -704,36 +642,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class IconBottomBar extends StatelessWidget {
-  IconBottomBar(
-      {Key? key,
-      required this.text,
-      required this.icon,
-      required this.selected,
-      required this.onPressed})
-      : super(key: key);
-  final String text;
-  final IconData icon;
-  final bool selected;
-  final Function() onPressed;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Icon(icon,
-              size: 35,
-              color: selected ? AppColors.darkOrange : AppColors.dividerColor),
-        ),
-        Text(
-          text,
-          style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'met',
-              color: selected ? AppColors.darkOrange : AppColors.dividerColor),
-        )
-      ],
-    );
-  }
-}

@@ -24,15 +24,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // @override
-  // void initState() {
-  //   getValue();
-  // }
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var isObsecure = true;
+  bool isObsecure = true;
   LoginBloc? loginBloc;
 
   @override
@@ -47,12 +42,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final msg = BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       if (state is LoginErrorState) {
-        return AlertDialog(
-          content: Text(state.message),
-        );
+        return SnackBar(content: Text("sonthing went wrong"));
       } else if (state is LoginLoadingState) {
         return Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: AppColors.darkOrange,
+          ),
         );
       } else {
         return Container();
@@ -61,15 +56,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: BlocListener<LoginBloc, LoginState>(
           listener: (BuildContext context, state) {
-          
             if (state is LoginSuccess) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ResturantScreen(
-                      token: state.token.toString(),
-                    ),
-                  ));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResturantScreen(
+                    token: state.token.toString(),
+                  ),
+                ),
+              );
               Fluttertoast.showToast(
                   msg: "Logged in Successfully",
                   toastLength: Toast.LENGTH_SHORT,
@@ -78,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: AppColors.dividerColor,
                   textColor: Colors.white,
                   fontSize: 16.0);
-            }
+            } 
           },
           child: Stack(
             children: [
@@ -121,13 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: 20.sp,
+                              height: 30.sp,
                             ),
                             Text(
-                              'Welcome',
+                              "Welcome",
                               style: TextStyle(
                                   fontSize: ScreenSizes.isMeduimScreen(context)
-                                      ? 22.sp
+                                      ? 20.sp
                                       : 33.sp,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: 'met'),
@@ -136,22 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: ScreenSizes.isMeduimScreen(context)
                                     ? 40.sp
                                     : 40.sp),
-                            Container(
-                                alignment: Alignment.topLeft,
-                                padding: const EdgeInsets.all(10),
-                                width: ScreenSizes.isMeduimScreen(context)
-                                    ? 236.sp
-                                    : 310.sp,
-                                child: Text(
-                                  'Employee Id',
-                                  style: TextStyle(
-                                      fontSize:
-                                          ScreenSizes.isMeduimScreen(context)
-                                              ? 10.sp
-                                              : 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'met'),
-                                )),
                             Container(
                               padding: const EdgeInsets.all(10),
                               height: ScreenSizes.isMeduimScreen(context)
@@ -188,25 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             SizedBox(
                               height: ScreenSizes.isMeduimScreen(context)
-                                  ? 15.sp
+                                  ? 20.sp
                                   : 10.sp,
                             ),
-                            Container(
-                                alignment: Alignment.topLeft,
-                                padding: const EdgeInsets.all(10),
-                                width: ScreenSizes.isMeduimScreen(context)
-                                    ? 236.sp
-                                    : 310.sp,
-                                child: Text(
-                                  'Password',
-                                  style: TextStyle(
-                                      fontSize:
-                                          ScreenSizes.isMeduimScreen(context)
-                                              ? 10.sp
-                                              : 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'met'),
-                                )),
                             Container(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                                 height: ScreenSizes.isMeduimScreen(context)
@@ -216,11 +179,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ? 250.sp
                                     : 330.sp,
                                 child: TextFormField(
-                                  obscureText: isObsecure == true,
+                                  obscureText: isObsecure,
                                   controller: passwordController,
                                   decoration: InputDecoration(
-                                    suffixIcon:
-                                        Icon(Icons.remove_red_eye_outlined),
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isObsecure = !isObsecure;
+                                          });
+                                        },
+                                        icon: isObsecure == true
+                                            ? Icon(
+                                                Icons.remove_red_eye_outlined)
+                                            : Icon(
+                                                Icons.remove_red_eye_sharp,
+                                                color: Colors.blue,
+                                              )),
                                     icon: Icon(Icons.lock),
                                     enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(

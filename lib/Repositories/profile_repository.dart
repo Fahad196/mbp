@@ -29,7 +29,9 @@ class ProfileRepository {
         throw Exception("Somthimg went wrong");
       }
     } catch (e) {
+      log(e.toString());
       throw e;
+      
     }
   }
 }

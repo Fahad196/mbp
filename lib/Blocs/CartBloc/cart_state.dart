@@ -16,23 +16,6 @@ class AddToCartState extends CartState{
   List<Object?> get props => [products];
 }
 
-class QuantityIncreasedState extends CartState {
-  final int quantity;
-   QuantityIncreasedState({
-    required this.quantity,
-  });
- 
-  @override
-  List<Object?> get props => [quantity];
-}
-
- class QuantityDecreasedState extends CartState{
-  final int quantity;
-  QuantityDecreasedState({required this.quantity});
-  @override
-  List<Object?> get props => [quantity];
- }
-
 
 class CartErrorState extends CartState{
   final String message;

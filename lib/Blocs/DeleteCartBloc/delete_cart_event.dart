@@ -15,4 +15,6 @@ class DeleteItemCartEvent extends DeleteCartEvent{
  final String portion;
  final String token;
 DeleteItemCartEvent(this.cartId,this.resturantId,this.portion,this.token);
+@override
+  List<Object?> get props => [cartId,resturantId,portion,token];
 }

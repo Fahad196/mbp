@@ -14,7 +14,7 @@ class ImageUploadState extends Equatable {
 class ImageUploadLoadingState extends ImageUploadState {}
 
 class ImageUploadedstate extends ImageUploadState {
-  final  image;
+  final String image;
   ImageUploadedstate(this.image);
   @override
   List<Object?> get props => [image];

@@ -1,15 +1,15 @@
 class DashboardTodayDishModel {
-  int? id;
-  String? isHalf;
-  String? fullPrice;
-  Null? halfPrice;
-  String? itemImage;
-  String? itemName;
-  String? itemDesp;
-  String? type;
-  String? time;
-  String? categoryId;
-  String? resturantId;
+ final int? id;
+ final String? isHalf;
+ final String? fullPrice;
+ final String? halfPrice;
+ final String? itemImage;
+ final String? itemName;
+ final String? itemDesp;
+ final String? type;
+ final String? time;
+ final String? categoryId;
+ final String? resturantId;
 
   DashboardTodayDishModel(
       {this.id,

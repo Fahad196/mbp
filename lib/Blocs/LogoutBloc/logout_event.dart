@@ -1,4 +1,6 @@
- import 'package:equatable/equatable.dart';
+ import 'dart:math';
+
+import 'package:equatable/equatable.dart';
 
 abstract class LogoutEvent extends Equatable{
   @override
@@ -10,4 +12,6 @@ class LogoutLoadingEvent extends LogoutEvent{}
 class LogedoutEvent extends LogoutEvent{
   final String token;
   LogedoutEvent(this.token);
+  
 }
+

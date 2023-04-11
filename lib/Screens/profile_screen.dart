@@ -19,9 +19,12 @@ import 'package:mybigplate/Util/screen_sizes.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key, required this.token, required this.index});
+  ProfileScreen({
+    super.key,
+    required this.token,
+  });
   final String token;
-  final int index;
+  // final int index;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -73,7 +76,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    
                     pickImage();
                   },
                   child: CircleAvatar(
@@ -89,11 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fit: BoxFit.cover,
                               ))
                             : ClipOval(
-                              child: Image.asset(
+                                child: Image.asset(
                                   "assets/defaultavatar.png",
                                   fit: BoxFit.fill,
                                 ),
-                            );
+                              );
                       }
                       return Text(
                         "no image",
@@ -111,11 +113,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           .add(ImageUploadedEvent(image!.path, widget.token));
                     }
                   },
-                  child: Text("Upload",style: TextStyle(fontFamily: 'met'),),
+                  child: Text(
+                    "Upload",
+                    style: TextStyle(fontFamily: 'met'),
+                  ),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkOrange,
-                      fixedSize: Size(ScreenSizes.isMeduimScreen(context)?60.sp:100.sp, ScreenSizes.isMeduimScreen(context)?10.sp:20.sp),
-                      ),
+                    backgroundColor: AppColors.darkOrange,
+                    fixedSize: Size(
+                        ScreenSizes.isMeduimScreen(context) ? 60.sp : 100.sp,
+                        ScreenSizes.isMeduimScreen(context) ? 10.sp : 20.sp),
+                  ),
                 ),
                 Container(
                   margin:
@@ -148,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 5.sp,
                       ),
                       Text(
-                          "${profiles[widget.index].firstName! + " " + profiles[widget.index].lastName!}",
+                          "${profiles.firstWhere((element) => element.firstName != null).firstName.toString() + " " + profiles.firstWhere((element) => element.lastName != null).lastName.toString()}",
                           style: TextStyle(
                             fontFamily: 'met',
                             fontSize: ScreenSizes.isMeduimScreen(context)
@@ -172,7 +179,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: 5.sp,
                       ),
-                      Text(profiles[widget.index].designation!,
+                      Text(
+                          profiles
+                              .firstWhere(
+                                  (element) => element.designation != null)
+                              .designation
+                              .toString(),
                           style: TextStyle(
                             fontFamily: 'met',
                             fontSize: ScreenSizes.isMeduimScreen(context)
@@ -196,7 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: 5.sp,
                       ),
-                      Text(profiles[widget.index].email!,
+                      Text(
+                          profiles
+                              .firstWhere((element) => element.email != null)
+                              .email
+                              .toString(),
                           style: TextStyle(
                             fontFamily: 'met',
                             fontSize: ScreenSizes.isMeduimScreen(context)

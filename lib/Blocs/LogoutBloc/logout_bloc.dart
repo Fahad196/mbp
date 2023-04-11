@@ -10,18 +10,22 @@ import 'logout_event.dart';
 
 class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   LogoutRepository repository;
-  FlutterSecureStorage storage=FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   LogoutBloc(this.repository) : super(LogoutLoadingState()) {
     on<LogoutLoadingEvent>((event, emit) => emit(LogoutLoadingState()));
     on<LogedoutEvent>((event, emit) async {
       var data = await repository.logingOut(event.token);
-      log("data ::::::::$data");
+      log(data.toString());
       try {
-        if(data.message=="User logged successfully"){
-        emit(LogedoutState());
-        }
        
+        if (data.message == "User logged successfully") {
+           storage.deleteAll();
+          String? v = await storage.read(key: "token");
+          emit(LogedoutState());
+          log(v.toString());
+        }
       } catch (e) {
+        log(e.toString());
         emit(LogoutErrorState(e.toString()));
       }
     });

@@ -1,5 +1,5 @@
 class LogoutModel {
-  String? message;
+  final String? message;
 
   LogoutModel({this.message});
 

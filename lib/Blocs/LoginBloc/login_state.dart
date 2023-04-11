@@ -15,12 +15,8 @@ class LoginSuccess extends LoginState {
   @override
   List<Object?> get props => [token];
 }
-
-class IsLoggedInState extends LoginState{
-  final String token;
-  IsLoggedInState(this.token);
-  @override
-  List<Object?> get props => [token];
+class PasswordOrUsernameState extends LoginState{
+  
 }
 class LoginErrorState extends LoginState {
   final String message;

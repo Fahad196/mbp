@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/CartViewBloc/cart_view_bloc.dart';
 import 'package:mybigplate/Blocs/CartViewBloc/cart_view_event.dart';
@@ -28,11 +29,7 @@ class CartScreen extends StatefulWidget {
   final String token;
   final int? index;
   final int resId;
-  CartScreen(
-    this.token,
-    this.index,
-    this.resId
-  );
+  CartScreen(this.token, this.index, this.resId);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -42,7 +39,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CartViewBloc>(context)
-        .add(CartViewLoadedEvent(widget.token,widget.resId));
+        .add(CartViewLoadedEvent(widget.token, widget.resId));
     return Scaffold(
         appBar: AppBar(
           title: Text("Cart"),
@@ -100,6 +97,15 @@ class _CartScreenState extends State<CartScreen> {
                                                     cartList[index].portion!,
                                                     widget.token));
                                           }
+                                          Fluttertoast.showToast(
+                                              msg: "Added Successfully",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor:
+                                                  AppColors.dividerColor,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
                                         }),
                                       }),
                                 )
@@ -401,13 +407,14 @@ class _CartScreenState extends State<CartScreen> {
         BlocListener<OrderNowBloc, OrderNowState>(
           listener: (context, state) {
             if (state is OrderedState) {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => OrderSummaryScreen(
                       token: widget.token,
                     ),
-                  ));
+                  ),
+                  (route) => false);
             }
           },
           child: ElevatedButton(
@@ -417,7 +424,17 @@ class _CartScreenState extends State<CartScreen> {
                     widget.token,
                     int.parse(cartList[widget.index!].resturantId!),
                     totalAmountt(cartList)));
-              });
+              }
+              
+              );
+                  Fluttertoast.showToast(
+                            msg: "Ordered Successfully",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: AppColors.dividerColor,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
             },
             child: Text("Order Now",
                 style: TextStyle(
@@ -443,15 +460,4 @@ totalAmountt(List<CartViewModel> cartList) {
     }
     return total;
   }
-
-  // var msg=BlocBuilder<OrderNowBloc,OrderNowState>(builder:(context, state) {
-  //   if(state is OrderErrorState){
-  //       return SnackBar(content: Text("Somthing went wrong"));
-  //   }else if(state is OrderNowLoadingState){
-  //     return Center(child: CircularProgressIndicator(color: AppColors.darkOrange,),);
-  //   }else if(state is OrderedState){
-  //     AlertDialog(content: Text("Successfully Ordered"),);
-  //   }
-  //   return Container();
-  // },);
 }
