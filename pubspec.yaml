@@ -46,6 +46,8 @@ dependencies:
   equatable: ^2.0.5
   image_picker: ^0.8.7+1
   fluttertoast: ^8.2.1
+  connectivity_plus: ^3.0.4
+  shimmer: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -14,6 +14,7 @@ import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_bl
 import 'package:mybigplate/Blocs/DeleteCartBloc/delete_cart_bloc.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_bloc.dart';
 import 'package:mybigplate/Blocs/ImageUploadBloc/image_upload_bloc.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_bloc.dart';
 import 'package:mybigplate/Blocs/LoginBloc/login_bloc.dart';
 import 'package:mybigplate/Blocs/LoginBloc/login_event.dart';
 import 'package:mybigplate/Blocs/LogoutBloc/logout_bloc.dart';
@@ -111,12 +112,15 @@ class MyApp extends StatelessWidget {
                 create: (context) => OrderDetailBloc(OrderDetailRepository())),
             BlocProvider(
                 create: (context) => ImageUploadBloc(ImageUploadRepository())),
+
+                 BlocProvider(
+                create: (context) => InternetBloc()),
           ],
           child: MaterialApp(
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: LoginScreen(),
+            home: StartPage(),
             debugShowCheckedModeBanner: false,
           ),
         );

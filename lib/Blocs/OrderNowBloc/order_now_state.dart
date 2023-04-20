@@ -11,7 +11,7 @@ abstract class OrderNowState extends Equatable {
 class OrderNowLoadingState extends OrderNowState {}
 
 class OrderedState extends OrderNowState {
-  OrderNowModel orders;
+  final String orders;
   OrderedState(this.orders);
   @override
   List<Object?> get props => [orders];
@@ -20,4 +20,8 @@ class OrderedState extends OrderNowState {
 class OrderErrorState extends OrderNowState {
   String message;
   OrderErrorState(this.message);
+}
+class OrderFinishedState extends OrderNowState{
+  @override
+  List<Object?> get props => [];
 }

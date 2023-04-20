@@ -4,12 +4,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_bloc.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_event.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_bloc.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_state.dart';
 import 'package:mybigplate/Util/colors.dart';
+import 'package:mybigplate/Widgets/cart_view_floating_button.dart';
 import '../Util/my_icons.dart';
 import '../Util/screen_sizes.dart';
 
@@ -21,15 +25,15 @@ class ProductDetailScreen extends StatefulWidget {
   final categoryId;
   final resturantId;
   final List products;
-  final int? index;
+  final int index;
   final String token;
-  ProductDetailScreen(
+  const ProductDetailScreen(
       {super.key,
       required this.name,
       required this.fullPrice,
       required this.halfPrice,
       required this.description,
-      this.index,
+      required this.index,
       required this.products,
       this.categoryId,
       this.resturantId,
@@ -51,7 +55,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<InternetBloc, internetState>(
+      listener: (context, interState) {
+        if (interState is InternetGainedState) {            
+              Fluttertoast.showToast(
+                  msg: "Internet connection is back!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: AppColors.textColorWhite,
+                  fontSize: 16.0);
+            } else if (interState is InternetLostState) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Container(
+                        height: 30.sp,
+                        width: 200.sp,
+                        alignment: Alignment.center,
+                        color: Colors.red,
+                        child: Text(
+                          "Please check your internet connection!",
+                          style: TextStyle(
+                              fontFamily: 'met',
+                              color: AppColors.textColorWhite),
+                        )),
+                  );
+                },
+              );
+            }
+      },
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
           leading: IconButton(
@@ -73,7 +109,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   BoxDecoration(borderRadius: BorderRadius.circular(21)),
               child: Image.network(
                 "http://laravel.artclients.in/storage/app/public/" +
-                    widget.products[widget.index!].itemImage,
+                    widget.products[widget.index].itemImage,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -98,7 +134,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       SizedBox(
                         width: 2.sp,
                       ),
-                      widget.products[widget.index!].type == "Non-Veg"
+                      widget.products[widget.index].type == "Non-Veg"
                           ? Icon(
                               MyIcons.veg,
                               color: Colors.red,
@@ -169,17 +205,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       : 15.sp,
                                 ))
                           ])),
-                      Icon(
-                        Icons.star,
-                        size:
-                            ScreenSizes.isMeduimScreen(context) ? 9.sp : 15.sp,
-                        color: AppColors.lightOrange,
+                      Image.asset(
+                        "assets/sr.png",
+                        height: 10.sp,
+                        width: 30.sp,
                       ),
                       Expanded(child: SizedBox()),
                       ElevatedButton(
                         onPressed: () {
                           dailogMethod(context);
-                          
                         },
                         child: Text(
                           "Add to cart",
@@ -214,7 +248,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ScreenSizes.isMeduimScreen(context) ? 9.sp : 15.sp,
                       ),
                       Text(
-                        " ${widget.products[widget.index!].time}" + " " + "min",
+                        " ${widget.products[widget.index].time}" + " " + "min",
                         style: TextStyle(
                             fontFamily: 'met',
                             fontSize: ScreenSizes.isMeduimScreen(context)
@@ -238,11 +272,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 3.sp,),
+                  SizedBox(
+                    height: 3.sp,
+                  ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      widget.description, //Description
+                      lorem(paragraphs: 1, words: 25),
+                      // widget.description, //Description
                       style: TextStyle(
                           fontFamily: 'met',
                           fontSize: ScreenSizes.isMeduimScreen(context)
@@ -256,7 +293,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
           ],
-        ));
+        ),
+        floatingActionButton: CartViewFloatingButtonWidget(
+            index: widget.index,
+            resturantId: int.parse(widget.resturantId),
+            token: widget.token),
+      ),
+    );
   }
 
   dailogMethod(BuildContext context) {
@@ -266,36 +309,55 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           return Dialog(
             child: StatefulBuilder(builder: (context, StateSetter setState) {
               return Container(
-                height: ScreenSizes.isMeduimScreen(context) ? 230.sp : 292.sp,
+                height: ScreenSizes.isMeduimScreen(context) ? 235.sp : 292.sp,
                 width: ScreenSizes.isMeduimScreen(context) ? 250.sp : 300.sp,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 8,bottom: 8),
-                      child: Text(
-                        "Place your order",
-                        style: TextStyle(
-                            color: AppColors.lightOrange,
-                            fontSize: ScreenSizes.isMeduimScreen(context)
-                                ? 16.sp
-                                : 20.sp,
-                            fontFamily: 'met'),
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 8.sp,
+                          ),
+                          Text(
+                            "Place your order",
+                            style: TextStyle(
+                                color: AppColors.lightOrange,
+                                fontSize: ScreenSizes.isMeduimScreen(context)
+                                    ? 16.sp
+                                    : 20.sp,
+                                fontFamily: 'met'),
+                          ),
+                          Expanded(child: SizedBox()),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(border: Border.all()),
+                                child: Icon(FontAwesomeIcons.xmark)),
+                          ),
+                          SizedBox(
+                            width: 12.sp,
+                          )
+                        ],
                       ),
                     ),
-                   
                     Image.network(
                       "http://laravel.artclients.in/storage/app/public/" +
-                          widget.products[widget.index!].itemImage,
+                          widget.products[widget.index].itemImage,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 100.sp,
                     ),
-                    SizedBox(height: 1.sp,),
+                    SizedBox(
+                      height: 1.sp,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                         
                           Row(
                             children: [
                               Text(
@@ -310,20 +372,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               SizedBox(
                                 width: 2.sp,
                               ),
-                              widget.products[widget.index!].type=="Non-Veg"?
-                              Icon(
-                                MyIcons.veg,
-                                color: Colors.red,
-                                size: ScreenSizes.isMeduimScreen(context)
-                                    ? 8.sp
-                                    : 14.sp,
-                              ): Icon(
-                                MyIcons.veg,
-                                color: Colors.green,
-                                size: ScreenSizes.isMeduimScreen(context)
-                                    ? 8.sp
-                                    : 14.sp,
-                              )
+                              widget.products[widget.index].type == "Non-Veg"
+                                  ? Icon(
+                                      MyIcons.veg,
+                                      color: Colors.red,
+                                      size: ScreenSizes.isMeduimScreen(context)
+                                          ? 8.sp
+                                          : 14.sp,
+                                    )
+                                  : Icon(
+                                      MyIcons.veg,
+                                      color: Colors.green,
+                                      size: ScreenSizes.isMeduimScreen(context)
+                                          ? 8.sp
+                                          : 14.sp,
+                                    )
                             ],
                           ),
                           SizedBox(
@@ -342,7 +405,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     : 11.sp,
                               ),
                               Text(
-                                "${widget.products[widget.index!].time} min",
+                                "${widget.products[widget.index].time} min",
                                 style: TextStyle(
                                     fontFamily: 'met',
                                     fontSize:
@@ -375,12 +438,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               )
                             ],
                           ),
-                         
                           SizedBox(
                             height: 8.sp,
                           ),
-                          widget.halfPrice != null &&
-                                  widget.products[widget.index!].isHalf == "1"
+                          widget.halfPrice.isNotEmpty &&
+                                  widget.products[widget.index].isHalf == "1"
                               ? halfQuantityMethod(context, setState)
                               : SizedBox(),
                           SizedBox(
@@ -481,22 +543,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             : ElevatedButton(
                 onPressed: () {
                   cartBloc!.add(AddToCartEvent(
-                      widget.products[widget.index!].id!,
-                      int.parse(widget.products[widget.index!].fullPrice!),
+                      widget.products[widget.index].id!,
+                      int.parse(widget.products[widget.index].fullPrice!),
                       fullItemQuantity,
-                      int.parse(widget.products[widget.index!].categoryId!),
-                      int.parse(widget.products[widget.index!].resturantId!),
-                      widget.products[widget.index!].type!,
+                      int.parse(widget.products[widget.index].categoryId!),
+                      int.parse(widget.products[widget.index].resturantId!),
+                      widget.products[widget.index].type!,
                       'Full',
                       widget.token));
-                          Fluttertoast.showToast(
-                            msg: "Added Successfully",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: AppColors.dividerColor,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                  setState(
+                    () {
+                      if (fullItemQuantity != 0) {
+                        fullItemQuantity = 0;
+                      }
+                    },
+                  );
+
+                  Fluttertoast.showToast(
+                      msg: "Added Successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.dividerColor,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 },
                 child: Text("Add to cart",
                     style: TextStyle(
@@ -590,14 +660,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             : ElevatedButton(
                 onPressed: () {
                   cartBloc!.add(AddToCartEvent(
-                      widget.products[widget.index!].id!,
-                      int.parse(widget.products[widget.index!].halfPrice!),
+                      widget.products[widget.index].id!,
+                      int.parse(widget.products[widget.index].halfPrice!),
                       halfItemQuantity,
-                      int.parse(widget.products[widget.index!].categoryId!),
-                      int.parse(widget.products[widget.index!].resturantId!),
-                      widget.products[widget.index!].type!,
+                      int.parse(widget.products[widget.index].categoryId!),
+                      int.parse(widget.products[widget.index].resturantId!),
+                      widget.products[widget.index].type!,
                       "Half",
                       widget.token));
+                  setState(
+                    () {
+                      if (halfItemQuantity != 0) {
+                        halfItemQuantity = 0;
+                      }
+                    },
+                  );
+                  Fluttertoast.showToast(
+                      msg: "Added Successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.dividerColor,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 },
                 child: Text("Add to cart",
                     style: TextStyle(

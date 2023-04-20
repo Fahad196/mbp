@@ -329,21 +329,141 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 Container(
-                    padding:
-                        EdgeInsets.only(left: 7.sp, right: 7.sp, top: 5.sp),
-                    height:
-                        ScreenSizes.isMeduimScreen(context) ? 70.sp : 130.sp,
-                    decoration: BoxDecoration(
-                        color: AppColors.textColorWhite,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(35),
-                            topLeft: Radius.circular(35)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppColors.elevationColor.withOpacity(.3),
-                              blurRadius: 4)
-                        ]),
-                    child: finalPriceCalculations(context, cartList))
+                      padding:
+                          EdgeInsets.only(left: 7.sp, right: 7.sp, top: 5.sp),
+                      height:
+                          ScreenSizes.isMeduimScreen(context) ? 70.sp : 130.sp,
+                      decoration: BoxDecoration(
+                          color: AppColors.textColorWhite,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(35),
+                              topLeft: Radius.circular(35)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: AppColors.elevationColor.withOpacity(.3),
+                                blurRadius: 4)
+                          ]),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Item total",
+                                style: TextStyle(
+                                  fontFamily: 'met',
+                                  fontSize: ScreenSizes.isMeduimScreen(context)
+                                      ? 8.sp
+                                      : 15.sp,
+                                ),
+                              ),
+                              Text("0.0",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 7.sp
+                                            : 14.sp,
+                                  )),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Tax",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 8.sp
+                                            : 15.sp,
+                                  )),
+                              Text("0.0",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 7.sp
+                                            : 14.sp,
+                                  ))
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("To pay",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 8.sp
+                                            : 15.sp,
+                                  )),
+                              Text(
+                                  "${cartList.isNotEmpty ? totalAmountt(cartList) : 0.0} Rs",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 7.sp
+                                            : 14.sp,
+                                  )),
+                            ],
+                          ),
+                          BlocListener<OrderNowBloc, OrderNowState>(
+                            listener: (context, state) {
+                              if (state is OrderedState) {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OrderSummaryScreen(
+                                        token: widget.token,
+                                      ),
+                                    ),
+                                    (route) => false);
+                              }
+                            },
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  BlocProvider.of<OrderNowBloc>(context).add(
+                                      OrderedEvent(
+                                          widget.token,
+                                          int.parse(cartList[widget.index == 0
+                                                  ? widget.index!
+                                                  : widget.index! - 1]
+                                              .resturantId
+                                              .toString()),
+                                          totalAmountt(cartList)));
+                                  log(widget.index.toString());
+                                });
+                                Fluttertoast.showToast(
+                                    msg: "Ordered Successfully",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: AppColors.dividerColor,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              },
+                              child: Text("Order Now",
+                                  style: TextStyle(
+                                    fontFamily: 'met',
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 8.sp
+                                            : 15.sp,
+                                  )),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.darkOrange,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp))),
+                            ),
+                          )
+                        ],
+                      ))
               ],
             );
           } else {
@@ -352,105 +472,9 @@ class _CartScreenState extends State<CartScreen> {
         }));
   }
 
-  Column finalPriceCalculations(
-      BuildContext context, List<CartViewModel> cartList) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Item total",
-              style: TextStyle(
-                fontFamily: 'met',
-                fontSize: ScreenSizes.isMeduimScreen(context) ? 8.sp : 15.sp,
-              ),
-            ),
-            Text("0.0",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 7.sp : 14.sp,
-                )),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Tax",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 8.sp : 15.sp,
-                )),
-            Text("0.0",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 7.sp : 14.sp,
-                ))
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("To pay",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 8.sp : 15.sp,
-                )),
-            Text("${cartList.isNotEmpty ? totalAmountt(cartList) : 0.0} Rs",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 7.sp : 14.sp,
-                )),
-          ],
-        ),
-        BlocListener<OrderNowBloc, OrderNowState>(
-          listener: (context, state) {
-            if (state is OrderedState) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderSummaryScreen(
-                      token: widget.token,
-                    ),
-                  ),
-                  (route) => false);
-            }
-          },
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                BlocProvider.of<OrderNowBloc>(context).add(OrderedEvent(
-                    widget.token,
-                    int.parse(cartList[widget.index!].resturantId!),
-                    totalAmountt(cartList)));
-              }
-              
-              );
-                  Fluttertoast.showToast(
-                            msg: "Ordered Successfully",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: AppColors.dividerColor,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-            },
-            child: Text("Order Now",
-                style: TextStyle(
-                  fontFamily: 'met',
-                  fontSize: ScreenSizes.isMeduimScreen(context) ? 8.sp : 15.sp,
-                )),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkOrange,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.sp))),
-          ),
-        )
-      ],
-    );
+   
   }
-}
+
 
 totalAmountt(List<CartViewModel> cartList) {
   int total = 0;

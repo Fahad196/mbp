@@ -18,3 +18,8 @@ class LogoutErrorState extends LogoutState{
   LogoutErrorState(this.message);
  
 }
+
+class NotLoggedOutState extends LogoutState{
+  @override
+  List<Object?> get props => [];
+} 

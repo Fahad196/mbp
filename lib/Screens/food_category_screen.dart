@@ -1,27 +1,24 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_interpolation_to_compose_strings
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mybigplate/Blocs/CartBloc/cart_bloc.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_bloc.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_event.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_state.dart';
-import 'package:mybigplate/Blocs/TableBloc/table_event.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_bloc.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_state.dart';
 import 'package:mybigplate/Models/food_category_model.dart';
 import 'package:mybigplate/Screens/product_detail_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
-
 import '../Blocs/CartBloc/cart_event.dart';
 import '../Util/my_icons.dart';
-import 'cart_screen.dart';
 
 class FoodCategoryScreen extends StatefulWidget {
   final int? categoryId;
@@ -50,353 +47,390 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
   Widget build(BuildContext context) {
     BlocProvider.of<FoodCategoryBloc>(context).add(FoodCategoryLoadedEvent(
         widget.resId!, widget.categoryId!, widget.token!));
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.darkOrange,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          elevation: 0,
-        ),
-        body: BlocBuilder<FoodCategoryBloc, FoodCategoryState>(
-            builder: (context, state) {
-          if (state is FoodCategoryErrorState) {
-            return Text("Error 404");
-          } else if (state is FoodCategoryLoadingState) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: AppColors.darkOrange,
+    return BlocListener<InternetBloc, internetState>(
+      listener: (context, interState) {
+        if (interState is InternetGainedState) {            
+              Fluttertoast.showToast(
+                  msg: "Internet connection is back!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: AppColors.textColorWhite,
+                  fontSize: 16.0);
+            } else if (interState is InternetLostState) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Container(
+                        height: 30.sp,
+                        width: 200.sp,
+                        alignment: Alignment.center,
+                        color: Colors.red,
+                        child: Text(
+                          "Please check your internet connection!",
+                          style: TextStyle(
+                              fontFamily: 'met',
+                              color: AppColors.textColorWhite),
+                        )),
+                  );
+                },
+              );
+            }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppColors.darkOrange,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
               ),
-            );
-          } else if (state is FoodCategoryLoadedstate) {
-            List<FoodCategoryModel> categoryList = state.hotSellingList;
-            return SafeArea(
-                child: Column(
-              children: [
-                ImageSlideshow(
-                  width: double.infinity,
-                  height: 200.sp,
-                  initialPage: 0,
-                  indicatorRadius: 5,
-                  indicatorColor: AppColors.lightOrange,
-                  indicatorBackgroundColor: AppColors.dividerColor,
-                  children: [
-                    Image.asset(
-                      "assets/banners/banner1.png",
-                      fit: BoxFit.fill,
-                    ),
-                    Image.asset(
-                      "assets/banners/banner2.png",
-                      fit: BoxFit.fill,
-                    ),
-                    Image.asset(
-                      "assets/banners/banner3.png",
-                      fit: BoxFit.fill,
-                    ),
-                  ],
-                  autoPlayInterval: 3000,
-                  isLoop: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            elevation: 0,
+          ),
+          body: BlocBuilder<FoodCategoryBloc, FoodCategoryState>(
+              builder: (context, state) {
+            if (state is FoodCategoryErrorState) {
+              return Text("Error 404");
+            } else if (state is FoodCategoryLoadingState) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.darkOrange,
                 ),
-                SizedBox(
-                  height: 8.sp,
-                ),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(3.sp),
-                  decoration: BoxDecoration(
-                      color: AppColors.textColorWhite,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.lightOrange.withOpacity(.8),
-                          offset: Offset(1, 1),
-                          blurRadius: 6,
-                        )
-                      ]),
-                  child: Text(
-                    widget.categoryName.toString(),
-                    style: TextStyle(
-                        fontFamily: 'met',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.lightOrange),
+              );
+            } else if (state is FoodCategoryLoadedstate) {
+              List<FoodCategoryModel> categoryList = state.hotSellingList;
+              return SafeArea(
+                  child: Column(
+                children: [
+                  ImageSlideshow(
+                    width: double.infinity,
+                    height: 200.sp,
+                    initialPage: 0,
+                    indicatorRadius: 5,
+                    indicatorColor: AppColors.lightOrange,
+                    indicatorBackgroundColor: AppColors.dividerColor,
+                    children: [
+                      Image.asset(
+                        "assets/banners/banner1.png",
+                        fit: BoxFit.fill,
+                      ),
+                      Image.asset(
+                        "assets/banners/banner2.png",
+                        fit: BoxFit.fill,
+                      ),
+                      Image.asset(
+                        "assets/banners/banner3.png",
+                        fit: BoxFit.fill,
+                      ),
+                    ],
+                    autoPlayInterval: 3000,
+                    isLoop: true,
                   ),
-                ),
-                SizedBox(
-                  height: 10.sp,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => ProductDetailScreen(
-                                          fullPrice: categoryList[index]
-                                              .fullPrice
-                                              .toString(),
-                                          description: categoryList[index]
-                                              .itemDesp
-                                              .toString(),
-                                          name: categoryList[index]
-                                              .itemName
-                                              .toString(),
-                                          index: index,
-                                          categoryId:
-                                              categoryList[index].categoryId,
-                                          resturantId:
-                                              categoryList[index].resturantId,
-                                          products: categoryList,
-                                          halfPrice: categoryList[index]
-                                              .halfPrice
-                                              .toString(),
-                                          token: widget.token.toString(),
-                                        )));
-                            log("Index ${index.toString()}");
-                          },
-                          child: Container(
-                            height: ScreenSizes.isMeduimScreen(context)
-                                ? 80.sp
-                                : 110.sp,
-                            margin: EdgeInsets.all(6.sp),
-                            decoration: BoxDecoration(
-                                color: AppColors.textColorWhite,
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color:
-                                          AppColors.lightOrange.withOpacity(.3),
-                                      offset: Offset(1, 3),
-                                      blurRadius: 3,
-                                      spreadRadius: 3)
-                                ]),
-                            child: Row(
-                              children: [
-                                Image.network(
-                                    "http://laravel.artclients.in/storage/app/public/" +
-                                        categoryList[index]
-                                            .itemImage
-                                            .toString()),
-                                SizedBox(
-                                  width: 10.sp,
-                                ),
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  flex: 8,
-                                  child: Padding(
+                  SizedBox(
+                    height: 8.sp,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(3.sp),
+                    decoration: BoxDecoration(
+                        color: AppColors.textColorWhite,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.lightOrange.withOpacity(.8),
+                            offset: Offset(1, 1),
+                            blurRadius: 6,
+                          )
+                        ]),
+                    child: Text(
+                      widget.categoryName.toString(),
+                      style: TextStyle(
+                          fontFamily: 'met',
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.lightOrange),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.sp,
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => ProductDetailScreen(
+                                            fullPrice: categoryList[index]
+                                                .fullPrice
+                                                .toString(),
+                                            description: categoryList[index]
+                                                .itemDesp
+                                                .toString(),
+                                            name: categoryList[index]
+                                                .itemName
+                                                .toString(),
+                                            index: index,
+                                            categoryId:
+                                                categoryList[index].categoryId,
+                                            resturantId:
+                                                categoryList[index].resturantId,
+                                            products: categoryList,
+                                            halfPrice: categoryList[index]
+                                                .halfPrice
+                                                .toString(),
+                                            token: widget.token.toString(),
+                                          )));
+                             
+                            },
+                            child: Container(
+                              height: ScreenSizes.isMeduimScreen(context)
+                                  ? 80.sp
+                                  : 110.sp,
+                              margin: EdgeInsets.all(6.sp),
+                              decoration: BoxDecoration(
+                                  color: AppColors.textColorWhite,
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: AppColors.lightOrange
+                                            .withOpacity(.3),
+                                        offset: Offset(1, 3),
+                                        blurRadius: 3,
+                                        spreadRadius: 3)
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                      "http://laravel.artclients.in/storage/app/public/" +
+                                          categoryList[index]
+                                              .itemImage
+                                              .toString()),
+                                  SizedBox(
+                                    width: 10.sp,
+                                  ),
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 8,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10.sp),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                categoryList[index]
+                                                    .itemName
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: ScreenSizes
+                                                            .isMeduimScreen(
+                                                                context)
+                                                        ? 8.sp
+                                                        : 15.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'met'),
+                                              ),
+                                              SizedBox(
+                                                width: 3.sp,
+                                              ),
+                                              categoryList[index].type ==
+                                                      "Non-Veg"
+                                                  ? Icon(
+                                                      MyIcons.veg,
+                                                      color: Colors.red,
+                                                      size: ScreenSizes
+                                                              .isMeduimScreen(
+                                                                  context)
+                                                          ? 9.sp
+                                                          : 12.sp,
+                                                    )
+                                                  : Icon(
+                                                      MyIcons.veg,
+                                                      color: Colors.green,
+                                                      size: ScreenSizes
+                                                              .isMeduimScreen(
+                                                                  context)
+                                                          ? 9.sp
+                                                          : 12.sp,
+                                                    )
+                                            ],
+                                          ),
+                                          Expanded(
+                                            child: ListView(
+                                              children: [
+                                                SizedBox(
+                                                  width: 200.sp,
+                                                  height: ScreenSizes
+                                                          .isMeduimScreen(
+                                                              context)
+                                                      ? 40.sp
+                                                      : 50.sp,
+                                                  child: Text(
+                                                    categoryList[index]
+                                                        .itemDesp
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: ScreenSizes
+                                                                .isMeduimScreen(
+                                                                    context)
+                                                            ? 6.sp
+                                                            : 10.sp,
+                                                        color: AppColors
+                                                            .dividerColor,
+                                                        fontFamily: 'met'),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.timer,
+                                                size:
+                                                    ScreenSizes.isMeduimScreen(
+                                                            context)
+                                                        ? 8.sp
+                                                        : 12.sp,
+                                                color: AppColors.textColorBlack,
+                                              ),
+                                              Text(
+                                                " ${categoryList[index].time} min",
+                                                style: TextStyle(
+                                                    fontSize: ScreenSizes
+                                                            .isMeduimScreen(
+                                                                context)
+                                                        ? 5.5.sp
+                                                        : 10.sp,
+                                                    fontFamily: 'met',
+                                                    color:
+                                                        AppColors.dividerColor),
+                                              ),
+                                              SizedBox(
+                                                width: 10.sp,
+                                              ),
+                                              Text(
+                                                "Rating : ",
+                                                style: TextStyle(
+                                                    fontSize: ScreenSizes
+                                                            .isMeduimScreen(
+                                                                context)
+                                                        ? 5.5.sp
+                                                        : 10.sp,
+                                                    fontFamily: 'met',
+                                                    color:
+                                                        AppColors.dividerColor),
+                                              ),
+                                              Text(
+                                                "4.5",
+                                                style: TextStyle(
+                                                    fontSize: ScreenSizes
+                                                            .isMeduimScreen(
+                                                                context)
+                                                        ? 5.5.sp
+                                                        : 10.sp,
+                                                    fontFamily: 'met',
+                                                    color:
+                                                        AppColors.dividerColor),
+                                              ),
+                                              Icon(
+                                                Icons.star,
+                                                size:
+                                                    ScreenSizes.isMeduimScreen(
+                                                            context)
+                                                        ? 8.sp
+                                                        : 12.sp,
+                                                color: AppColors.textColorBlack,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(child: SizedBox()),
+                                  Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 10.sp),
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              categoryList[index]
-                                                  .itemName
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: ScreenSizes
-                                                          .isMeduimScreen(
-                                                              context)
-                                                      ? 10.sp
-                                                      : 15.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: 'met'),
-                                            ),
-                                            SizedBox(
-                                              width: 3.sp,
-                                            ),
-                                            categoryList[index].type ==
-                                                    "Non-Veg"
-                                                ? Icon(
-                                                    MyIcons.veg,
-                                                    color: Colors.red,
-                                                    size: ScreenSizes
-                                                            .isMeduimScreen(
-                                                                context)
-                                                        ? 9.sp
-                                                        : 12.sp,
-                                                  )
-                                                : Icon(
-                                                    MyIcons.veg,
-                                                    color: Colors.green,
-                                                    size: ScreenSizes
-                                                            .isMeduimScreen(
-                                                                context)
-                                                        ? 9.sp
-                                                        : 12.sp,
-                                                  )
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: ListView(
-                                            children: [
-                                              SizedBox(
-                                                width: 200.sp,
-                                                height:
-                                                    ScreenSizes.isMeduimScreen(
-                                                            context)
-                                                        ? 40.sp
-                                                        : 50.sp,
-                                                child: Text(
-                                                  categoryList[index]
-                                                      .itemDesp
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: ScreenSizes
-                                                              .isMeduimScreen(
-                                                                  context)
-                                                          ? 6.sp
-                                                          : 10.sp,
-                                                      color: AppColors
-                                                          .dividerColor,
-                                                      fontFamily: 'met'),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.timer,
-                                              size: ScreenSizes.isMeduimScreen(
-                                                      context)
-                                                  ? 8.sp
-                                                  : 12.sp,
-                                              color: AppColors.textColorBlack,
-                                            ),
-                                            Text(
-                                              " ${categoryList[index].time} min",
-                                              style: TextStyle(
-                                                  fontSize: ScreenSizes
-                                                          .isMeduimScreen(
-                                                              context)
-                                                      ? 5.5.sp
-                                                      : 10.sp,
-                                                  fontFamily: 'met',
-                                                  color:
-                                                      AppColors.dividerColor),
-                                            ),
-                                            SizedBox(
-                                              width: 10.sp,
-                                            ),
-                                            Text(
-                                              "Rating : ",
-                                              style: TextStyle(
-                                                  fontSize: ScreenSizes
-                                                          .isMeduimScreen(
-                                                              context)
-                                                      ? 5.5.sp
-                                                      : 10.sp,
-                                                  fontFamily: 'met',
-                                                  color:
-                                                      AppColors.dividerColor),
-                                            ),
-                                            Text(
-                                              "4.5",
-                                              style: TextStyle(
-                                                  fontSize: ScreenSizes
-                                                          .isMeduimScreen(
-                                                              context)
-                                                      ? 5.5.sp
-                                                      : 10.sp,
-                                                  fontFamily: 'met',
-                                                  color:
-                                                      AppColors.dividerColor),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              size: ScreenSizes.isMeduimScreen(
-                                                      context)
-                                                  ? 8.sp
-                                                  : 12.sp,
-                                              color: AppColors.textColorBlack,
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(child: SizedBox()),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(vertical: 10.sp),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "${categoryList[index].fullPrice.toString()}Rs ",
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenSizes.isMeduimScreen(
-                                                        context)
-                                                    ? 7.sp
-                                                    : 12.sp,
-                                            fontFamily: 'met',
-                                            color: AppColors.textColorBlack),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          dialogMethod(
-                                              context, categoryList, index);
-                                        },
-                                        child: Text(
-                                          "Add to cart",
+                                        Text(
+                                          "${categoryList[index].fullPrice.toString()}Rs ",
                                           style: TextStyle(
                                               fontSize:
                                                   ScreenSizes.isMeduimScreen(
                                                           context)
                                                       ? 7.sp
-                                                      : 10.sp,
+                                                      : 12.sp,
                                               fontFamily: 'met',
-                                              color: AppColors.textColorWhite),
+                                              color: AppColors.textColorBlack),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                            elevation: 5,
-                                            shadowColor: AppColors.darkOrange,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            padding: EdgeInsets.all(3.sp),
-                                            backgroundColor:
-                                                AppColors.darkOrange),
-                                      )
-                                    ],
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            dialogMethod(
+                                                context, categoryList, index);
+                                          },
+                                          child: Text(
+                                            "Add to cart",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ScreenSizes.isMeduimScreen(
+                                                            context)
+                                                        ? 7.sp
+                                                        : 10.sp,
+                                                fontFamily: 'met',
+                                                color:
+                                                    AppColors.textColorWhite),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                              elevation: 5,
+                                              shadowColor: AppColors.darkOrange,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              padding: EdgeInsets.all(3.sp),
+                                              backgroundColor:
+                                                  AppColors.darkOrange),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 5.sp,
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 5.sp,
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      itemCount: categoryList.length,
+                          );
+                        },
+                        itemCount: categoryList.length,
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ));
-          } else {
-            return Container();
-          }
-        }));
+                  )
+                ],
+              ));
+            } else {
+              return Container();
+            }
+          })),
+    );
   }
 
   Future<dynamic> dialogMethod(
@@ -406,34 +440,50 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
         builder: (BuildContext context) {
           return Dialog(
             child: StatefulBuilder(builder: (context, setState) {
-              return Container(
-                height: ScreenSizes.isMeduimScreen(context) ? 225.sp : 290.sp,
+              return SizedBox(
+                height: ScreenSizes.isMeduimScreen(context) ? 235.sp : 290.sp,
                 width: ScreenSizes.isMeduimScreen(context) ? 250.sp : 300.sp,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 8,bottom: 8),
-                      child: Text(
-                        "Place your order",
-                        style: TextStyle(
-                            color: AppColors.lightOrange,
-                            fontSize: ScreenSizes.isMeduimScreen(context)
-                                ? 16.sp
-                                : 20.sp,
-                            fontFamily: 'met'),
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 8),
+                          Text(
+                            "Place your order",
+                            style: TextStyle(
+                                color: AppColors.lightOrange,
+                                fontSize: ScreenSizes.isMeduimScreen(context)
+                                    ? 16.sp
+                                    : 20.sp,
+                                fontFamily: 'met'),
+                          ),
+                          Expanded(child: SizedBox()),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(border: Border.all()),
+                                child: Icon(FontAwesomeIcons.xmark)),
+                          ),
+                          SizedBox(
+                            width: 12.sp,
+                          )
+                        ],
                       ),
                     ),
-                   
-                    
                     Image.network(
                       "http://laravel.artclients.in/storage/app/public/" +
                           categoryList[index].itemImage.toString(),
                       fit: BoxFit.cover,
                       height: 100.sp,
                       width: double.infinity,
-                    ),SizedBox(
-                          width: 10.sp,
-                        ),
+                    ),
+                    SizedBox(
+                      width: 10.sp,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -448,6 +498,9 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
                                       ? 9.sp
                                       : 18.sp,
                                 ),
+                              ),
+                              SizedBox(
+                                width: 5.sp,
                               ),
                               Icon(
                                 MyIcons.veg,
@@ -477,9 +530,10 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
                                 "30 min",
                                 style: TextStyle(
                                     fontFamily: 'met',
-                                    fontSize: ScreenSizes.isMeduimScreen(context)
-                                        ? 7.sp
-                                        : 12.sp,
+                                    fontSize:
+                                        ScreenSizes.isMeduimScreen(context)
+                                            ? 7.sp
+                                            : 12.sp,
                                     color: Color.fromARGB(255, 133, 128, 128)
                                         .withOpacity(.9)),
                               ),
@@ -622,6 +676,22 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
                       categoryList[index].type!,
                       "Full",
                       widget.token.toString()));
+                  setState(
+                    () {
+                      if (fullItemQuantity != 0) {
+                        fullItemQuantity = 0;
+                      }
+                    },
+                  );
+
+                  Fluttertoast.showToast(
+                      msg: "Added Successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.dividerColor,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 },
                 child: Text("Add to cart",
                     style: TextStyle(
@@ -724,6 +794,22 @@ class _FoodCategoryScreenState extends State<FoodCategoryScreen> {
                       categoryList[index].type!,
                       "Half",
                       widget.token.toString()));
+
+                  setState(
+                    () {
+                      if (halfItemQuantity != 0) {
+                        halfItemQuantity = 0;
+                      }
+                    },
+                  );
+                  Fluttertoast.showToast(
+                      msg: "Added Successfully",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.dividerColor,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 },
                 child: Text("Add to cart",
                     style: TextStyle(

@@ -19,15 +19,28 @@ import '../Blocs/LogoutBloc/logout_state.dart';
 import 'login_screen.dart';
 import 'order_summary_screen.dart';
 
-class ResturantScreen extends StatelessWidget {
+class ResturantScreen extends StatefulWidget {
   final String token;
   ResturantScreen({
     required this.token,
   });
+
+  @override
+  State<ResturantScreen> createState() => _ResturantScreenState();
+}
+
+class _ResturantScreenState extends State<ResturantScreen> {
+
+  @override
+  void initState() {
+      BlocProvider.of<ResturantBloc>(context)
+        .add(ResturantLoadEvent(token: widget.token.toString()));
+        BlocProvider.of<LogoutBloc>(context).add(NotLoggedOutEvent());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ResturantBloc>(context)
-        .add(ResturantLoadEvent(token: token.toString()));
+  
     return Scaffold(
         drawer: Drawer(
           width: ScreenSizes.isMeduimScreen(context) ? 130.sp : 150.sp,
@@ -46,7 +59,7 @@ class ResturantScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => OrderSummaryScreen(
-                                token: token,
+                                token: widget.token,
                               )));
                 },
                 child: Text(
@@ -65,7 +78,7 @@ class ResturantScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ProfileScreen(
-                                token: token,
+                                token: widget.token,
                               )));
                 },
                 child: Text(
@@ -92,8 +105,8 @@ class ResturantScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         BlocProvider.of<LogoutBloc>(context)
-                            .add(LogedoutEvent(token));
-                        log(token.toString());
+                            .add(LogedoutEvent(widget.token));
+                        log(widget.token.toString());
                       },
                       child: Text(
                         "Log out",
@@ -161,7 +174,7 @@ class ResturantScreen extends StatelessWidget {
                                     builder: (context) => TableScreen(
                                         resturantList[index].resId,
                                         index,
-                                        token),
+                                        widget.token),
                                   ));
                             },
                             child: Padding(

@@ -15,19 +15,17 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
     on<LogoutLoadingEvent>((event, emit) => emit(LogoutLoadingState()));
     on<LogedoutEvent>((event, emit) async {
       var data = await repository.logingOut(event.token);
-      log(data.toString());
+
       try {
-       
         if (data.message == "User logged successfully") {
-           storage.deleteAll();
-          String? v = await storage.read(key: "token");
+          storage.deleteAll();
           emit(LogedoutState());
-          log(v.toString());
         }
       } catch (e) {
-        log(e.toString());
         emit(LogoutErrorState(e.toString()));
       }
     });
+
+    on<NotLoggedOutEvent>((event, emit) => emit(NotLoggedOutState()));
   }
 }

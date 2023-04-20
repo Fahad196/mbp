@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, sort_child_properties_last, unused_local_variable, unused_field, prefer_final_fields, prefer_adjacent_string_concatenation
-import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_bloc.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_event.dart';
 import 'package:mybigplate/Blocs/DashboardHotSellingBloc/dashboard_hotselling_state.dart';
@@ -13,16 +14,19 @@ import 'package:mybigplate/Blocs/DashboardMenuBloc/dashboard_menu_event.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_bloc.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_event.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_state.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_bloc.dart';
+import 'package:mybigplate/Blocs/InternetBloc/internet_state.dart';
 import 'package:mybigplate/Models/dashboard_hotselling_model.dart';
 import 'package:mybigplate/Models/dashboard_menu_model.dart';
 import 'package:mybigplate/Models/dashboard_todaydish_model.dart';
-import 'package:mybigplate/Screens/cart_screen.dart';
 import 'package:mybigplate/Screens/food_category_screen.dart';
 import 'package:mybigplate/Screens/menu_screen.dart';
 import 'package:mybigplate/Screens/product_detail_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
+import 'package:shimmer/shimmer.dart';
 import '../Blocs/DashboardMenuBloc/dashboard_menu_state.dart';
+import '../Widgets/cart_view_floating_button.dart';
 
 class DashboardScreen extends StatefulWidget {
   int id;
@@ -36,8 +40,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
   @override
-  DashboardScreen get widget => super.widget;
-  @override
   void initState() {
     BlocProvider.of<DashboardHotSellingBloc>(context)
         .add(DashboardHotSellingLoadedEvent(widget.id, widget.token));
@@ -48,156 +50,172 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
   }
 
-  ScrollController scrollController = ScrollController(
-    initialScrollOffset: 10,
-    keepScrollOffset: true,
-  );
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: AppBar(
+    return BlocListener<InternetBloc, internetState>(
+      listener: (context, interState) {
+        if (interState is InternetGainedState) {
+          Fluttertoast.showToast(
+              msg: "Internet connection is back!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: AppColors.textColorWhite,
+              fontSize: 16.0);
+        } else if (interState is InternetLostState) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Container(
+                    height: 30.sp,
+                    width: 200.sp,
+                    alignment: Alignment.center,
+                    color: Colors.red,
+                    child: Text(
+                      "Please check your internet connection!",
+                      style: TextStyle(
+                          fontFamily: 'met', color: AppColors.textColorWhite),
+                    )),
+              );
+            },
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.orange,
           elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "Dashboard",
-            style: TextStyle(fontFamily: 'met'),
-          ),
         ),
-      ),
-      body: ListView(
-        controller: scrollController,
-        physics: AlwaysScrollableScrollPhysics(),
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ImageSlideshow(
-                indicatorColor: Colors.orange,
-                onPageChanged: (value) {
-                  debugPrint('Page changed: $value');
-                },
-                height: 198.sp,
-                initialPage: 0,
-                indicatorRadius: 5,
-                autoPlayInterval: 6000,
-                isLoop: true,
-                children: [
-                  Image.asset(
-                    "assets/banners/banner1.png",
-                    fit: BoxFit.fill,
+        body: ListView(
+          
+          physics: AlwaysScrollableScrollPhysics(),
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ImageSlideshow(
+                  indicatorColor: Colors.orange,
+                  onPageChanged: (value) {
+                    debugPrint('Page changed: $value');
+                  },
+                  height: 198.sp,
+                  initialPage: 0,
+                  indicatorRadius: 5,
+                  autoPlayInterval: 6000,
+                  isLoop: true,
+                  children: [
+                    Image.asset(
+                      "assets/banners/banner1.png",
+                      fit: BoxFit.fill,
+                    ),
+                    Image.asset(
+                      "assets/banners/banner2.png",
+                      fit: BoxFit.fill,
+                    ),
+                    Image.asset(
+                      "assets/banners/banner3.png",
+                      fit: BoxFit.fill,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10.sp,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                  width: double.infinity,
+                  color: Color.fromARGB(255, 237, 234, 234),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                        text: TextSpan(
+                            text: " Today's",
+                            style: TextStyle(
+                                color: AppColors.textColorBlack,
+                                fontFamily: 'met',
+                                fontWeight: FontWeight.w700,
+                                fontSize: ScreenSizes.isMeduimScreen(context)
+                                    ? 16.sp
+                                    : 20.sp),
+                            children: [
+                          TextSpan(
+                            text: " Dishes",
+                            style: TextStyle(
+                                color: AppColors.lightOrange,
+                                fontFamily: 'met',
+                                fontWeight: FontWeight.w700,
+                                fontSize: ScreenSizes.isMeduimScreen(context)
+                                    ? 16.sp
+                                    : 20.sp),
+                          )
+                        ])),
                   ),
-                  Image.asset(
-                    "assets/banners/banner2.png",
-                    fit: BoxFit.fill,
-                  ),
-                  Image.asset(
-                    "assets/banners/banner3.png",
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10.sp,
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: RichText(
-                    text: TextSpan(
-                        text: " Today's",
-                        style: TextStyle(
-                            color: AppColors.textColorBlack,
-                            fontFamily: 'met',
-                            fontWeight: FontWeight.w700,
-                            fontSize: ScreenSizes.isMeduimScreen(context)
-                                ? 16.sp
-                                : 20.sp),
+                ),
+                SizedBox(
+                  height: 10.sp,
+                ),
+                todayDishes(context),
+                SizedBox(
+                  height: 10.sp,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                      width: double.infinity,
+                      color: Color.fromARGB(255, 237, 234, 234),
+                      child: Row(
                         children: [
-                      TextSpan(
-                        text: " Dishes",
-                        style: TextStyle(
-                            color: AppColors.lightOrange,
-                            fontFamily: 'met',
-                            fontWeight: FontWeight.w700,
-                            fontSize: ScreenSizes.isMeduimScreen(context)
-                                ? 16.sp
-                                : 20.sp),
-                      )
-                    ])),
-              ),
-              SizedBox(
-                height: 10.sp,
-              ),
-              todayDishes(context),
-              SizedBox(
-                height: 10.sp,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              text: " Hot",
-                              style: TextStyle(
-                                  fontFamily: 'met',
-                                  fontSize: ScreenSizes.isMeduimScreen(context)
-                                      ? 16.sp
-                                      : 20.sp,
-                                  color: AppColors.textColorBlack,
-                                  fontWeight: FontWeight.w800),
-                              children: [
-                            TextSpan(
-                              text: " Sellings",
-                              style: TextStyle(
-                                  fontFamily: 'met',
-                                  fontSize: ScreenSizes.isMeduimScreen(context)
-                                      ? 16.sp
-                                      : 20.sp,
-                                  color: AppColors.lightOrange,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                          ])),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.sp,
-                  ),
-                  hotSellings(context),
-                ],
-              ),
-              SizedBox(
-                height: 5.sp,
-              ),
-              discoverOurMenu(widget.index),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: SizedBox(
-        height: 33.sp,
-        width: 33.sp,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CartScreen(widget.token, widget.index, widget.id),
-                ));
-          },
-          backgroundColor: AppColors.darkOrange,
-          child: Icon(
-            Icons.shopping_basket,
-            size: 15.sp,
-          ),
+                          RichText(
+                              text: TextSpan(
+                                  text: " Hot",
+                                  style: TextStyle(
+                                      fontFamily: 'met',
+                                      fontSize:
+                                          ScreenSizes.isMeduimScreen(context)
+                                              ? 16.sp
+                                              : 20.sp,
+                                      color: AppColors.textColorBlack,
+                                      fontWeight: FontWeight.w800),
+                                  children: [
+                                TextSpan(
+                                  text: " Sellings",
+                                  style: TextStyle(
+                                      fontFamily: 'met',
+                                      fontSize:
+                                          ScreenSizes.isMeduimScreen(context)
+                                              ? 16.sp
+                                              : 20.sp,
+                                      color: AppColors.lightOrange,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ])),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.sp,
+                    ),
+                    hotSellings(context),
+                  ],
+                ),
+                SizedBox(
+                  height: 5.sp,
+                ),
+                discoverOurMenu(widget.index),
+              ],
+            ),
+          ],
         ),
+        floatingActionButton: CartViewFloatingButtonWidget(
+            index: widget.index, resturantId: widget.id, token: widget.token),
       ),
     );
   }
@@ -211,7 +229,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return Text("somthing went wrong");
       } else if (state is DashboardMenuLoadingState) {
         return Center(
-          child: CircularProgressIndicator(color: AppColors.darkOrange,),
+          child: CircularProgressIndicator(
+            color: AppColors.darkOrange,
+          ),
         );
       } else if (state is DashboardMenuLoadedstate) {
         List<DashboardMenuModel> menu = state.menu;
@@ -258,16 +278,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               dashboardMenuModel: menu,
                               categoryName: menu[index].categoryName.toString(),
                               token: widget.token,
-                            
                             ),
                           ));
                     },
-                    child: Text(
-                      "View All",
-                      style: TextStyle(
-                          fontFamily: 'met',
-                          fontSize: 10.sp,
-                          color: Color.fromARGB(255, 150, 146, 146)),
+                    child: Shimmer.fromColors(
+                      baseColor: AppColors.textColorBlack,
+                      highlightColor: AppColors.dividerColor,
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                            fontFamily: 'met',
+                            fontSize: 10.sp,
+                            color: AppColors.textColorBlack),
+                      ),
                     ),
                   ),
                 ],
@@ -314,8 +337,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
-                                        image:
-                                            NetworkImage(  "http://laravel.artclients.in/storage/app/public/" + "${menu[index].imgPath}"),
+                                        image: NetworkImage(
+                                            "http://laravel.artclients.in/storage/app/public/" +
+                                                "${menu[index].imgPath}"),
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -329,7 +353,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     children: [
                                       Text(menu[index].categoryName.toString(),
                                           style: TextStyle(
-                                              color: AppColors.lightOrange,
+                                              color: AppColors.textColorBlack,
                                               fontFamily: 'met',
                                               fontSize:
                                                   ScreenSizes.isMeduimScreen(
@@ -356,7 +380,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       )));
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.all(2),
+                                          padding: EdgeInsets.all(3.sp),
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(20),
@@ -369,7 +393,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 fontSize:
                                                     ScreenSizes.isMeduimScreen(
                                                             context)
-                                                        ? 9.sp
+                                                        ? 8.sp
                                                         : 11.sp,
                                                 color: AppColors.textColorWhite,
                                                 fontFamily: 'met'),
@@ -420,7 +444,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return Text("something went wrong");
         } else if (state is DashboardHotSellingLoadingState) {
           return Center(
-            child: CircularProgressIndicator(color: AppColors.darkOrange,),
+            child: CircularProgressIndicator(
+              color: AppColors.darkOrange,
+            ),
           );
         } else if (state is DashboardHotSellingLoadedstate) {
           List<DashboardHotSellingModel> hotSellings = state.hotSellingList;
@@ -469,13 +495,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: Column(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(6.sp),topRight: Radius.circular(6.sp)),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6.sp),
+                                topRight: Radius.circular(6.sp)),
                             child: Image.network(
-                                "http://laravel.artclients.in/storage/app/public/"+"${hotSellings[index].itemImage}",
+                              "http://laravel.artclients.in/storage/app/public/" +
+                                  "${hotSellings[index].itemImage}",
                               height: ScreenSizes.isMeduimScreen(context)
                                   ? 80.sp
                                   : 100.sp,
-                              
                               width: double.infinity,
                               fit: BoxFit.fill,
                               errorBuilder: (context, error, stackTrace) {
@@ -510,7 +538,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         fontFamily: 'met',
                                         fontSize:
                                             ScreenSizes.isMeduimScreen(context)
-                                                ? 7.5.sp
+                                                ? 7.sp
                                                 : 13.sp,
                                       )),
                                 ),
@@ -574,14 +602,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //--------------------------------------------TodayDishes-------------------------------------------------
   SizedBox todayDishes(BuildContext context) {
     return SizedBox(
-      height: ScreenSizes.isMeduimScreen(context) ? 94.sp : 120.sp,
+      height: ScreenSizes.isMeduimScreen(context) ? 100.sp : 120.sp,
       child: BlocBuilder<DashboardTodayDishBloc, DashboardTodayDishState>(
           builder: (context, state) {
         if (state is DashboardTodayDishErrorState) {
           return Text("Something went error");
         } else if (state is DashboardTodayDishLoadingState) {
           return Center(
-            child: CircularProgressIndicator(color: AppColors.darkOrange,),
+            child: CircularProgressIndicator(
+              color: AppColors.darkOrange,
+            ),
           );
         } else if (state is DashboardTodayDishLoadedstate) {
           List<DashboardTodayDishModel> todayDish = state.todayDish;
@@ -607,27 +637,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ));
                 },
                 child: Padding(
-                  padding: EdgeInsets.only(right: 15.sp),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          height: ScreenSizes.isMeduimScreen(context)
-                              ? 80.sp
-                              : 100.sp,
-                          child: ClipRRect(
-                             borderRadius: BorderRadius.circular(6.sp),
-                            child: Image.network(  "http://laravel.artclients.in/storage/app/public/"+"${todayDish[index].itemImage}"))),
-                          SizedBox(height: 3.sp,),
-                      Text(
-                        todayDish[index].itemName.toString(),
-                        style: TextStyle(
-                          fontFamily: 'met',
-                          fontSize: ScreenSizes.isMeduimScreen(context)
-                              ? 7.5.sp
-                              : 13.sp,
+                  padding: EdgeInsets.symmetric(horizontal: 12.sp),
+                  child: Container(
+                    width: ScreenSizes.isMeduimScreen(context) ? 90.sp : 140.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.5),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(2, 2),
+                            blurRadius: 6,
+                            spreadRadius: 0,
+                            color: AppColors.lightOrange.withOpacity(.5)),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                           borderRadius: BorderRadius.only(topLeft: Radius.circular(6.sp),topRight: Radius.circular(6.sp)),
+                            child: Image.network(
+                                "http://laravel.artclients.in/storage/app/public/" +
+                                    "${todayDish[index].itemImage}",
+                                    height: ScreenSizes.isMeduimScreen(context)
+                            ? 80.sp
+                            : 100.sp,
+                            width:double.infinity,
+                          fit: BoxFit.fitWidth
+                                    )),
+                        SizedBox(
+                          height: 3.sp,
                         ),
-                      )
-                    ],
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 6,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 3.sp),
+                            child: Text(
+                              todayDish[index].itemName.toString(),
+                              style: TextStyle(
+                                fontFamily: 'met',
+                                fontSize: ScreenSizes.isMeduimScreen(context)
+                                    ? 7.sp
+                                    : 13.sp,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -641,4 +698,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-

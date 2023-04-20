@@ -15,3 +15,8 @@ class LogedoutEvent extends LogoutEvent{
   
 }
 
+class NotLoggedOutEvent extends LogoutEvent{
+  @override
+  List<Object?> get props => [];
+} 
+
