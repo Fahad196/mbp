@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings, deprecated_member_use
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,13 +12,12 @@ import 'package:mybigplate/Blocs/ProfileBloc/profile_bloc.dart';
 import 'package:mybigplate/Blocs/ProfileBloc/profile_event.dart';
 import 'package:mybigplate/Blocs/ProfileBloc/profile_state.dart';
 import 'package:mybigplate/Models/profile_model.dart';
-import 'package:mybigplate/Screens/dashboard_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Util/screen_sizes.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({
+  const ProfileScreen({
     super.key,
     required this.token,
   });

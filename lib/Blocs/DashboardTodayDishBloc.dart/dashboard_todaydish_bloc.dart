@@ -1,6 +1,4 @@
 
-import 'dart:math';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_event.dart';
 import 'package:mybigplate/Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_state.dart';
@@ -22,7 +20,7 @@ class DashboardTodayDishBloc
         emit(DashboardTodayDishLoadedstate(data));
       
       } catch (e) {
-      print(e);
+    
         throw e.toString();
       }
     });

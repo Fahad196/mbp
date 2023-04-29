@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mybigplate/Blocs/OrderSummaryBloc/order_summary_bloc.dart';
@@ -23,7 +21,7 @@ import 'login_screen.dart';
 class OrderSummaryScreen extends StatelessWidget {
   final String token;
 
-  OrderSummaryScreen({required this.token,});
+  const OrderSummaryScreen({super.key, required this.token,});
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<OrderSummaryBloc>(context)

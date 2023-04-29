@@ -1,24 +1,22 @@
 // ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, sort_child_properties_last, unused_local_variable, no_leading_underscores_for_local_identifiers, deprecated_member_use, sized_box_for_whitespace, use_build_context_synchronously
 
-import 'dart:convert';
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mybigplate/Blocs/LoginBloc/login_event.dart';
 import 'package:mybigplate/Blocs/LoginBloc/login_state.dart';
-import 'package:mybigplate/Screens/dashboard_screen.dart';
 import 'package:mybigplate/Screens/resturant_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
 import 'package:mybigplate/Widgets/custom_bottom_navbar.dart';
 import '../Blocs/LoginBloc/login_bloc.dart';
-import '../Repositories/login_repository.dart';
 import '../Util/screen_sizes.dart';
 import '../Widgets/top_curve.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

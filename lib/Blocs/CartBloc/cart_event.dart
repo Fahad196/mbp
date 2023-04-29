@@ -1,6 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:equatable/equatable.dart';
-import 'package:mybigplate/Models/cart_model.dart';
-import 'package:mybigplate/Models/cart_view_model.dart';
 
 abstract class CartEvent extends Equatable {
   @override

@@ -1,11 +1,8 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, prefer_interpolation_to_compose_strings, avoid_print
 
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:mybigplate/Blocs/LoginBloc/login_bloc.dart';
 import 'package:mybigplate/Models/resturant_model.dart';
 
 class ResturantRepository {
@@ -25,7 +22,7 @@ class ResturantRepository {
       if (response.statusCode == 200) {
         final List jsonResponse = jsonDecode(response.body);
         var d = jsonResponse.map((e) => ResturantModel.fromJson(e)).toList();
-    
+        
         return d;
         
       } else {

@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mybigplate/Blocs/OrderNowBloc/order_now_state.dart';
 import 'package:mybigplate/Blocs/OrderSummaryBloc/order_summary_event.dart';
 import 'package:mybigplate/Repositories/order_summary_repository.dart';
 

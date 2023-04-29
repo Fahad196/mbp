@@ -9,6 +9,6 @@ class DashboardHotSellingLoadingEvent extends DashboardHotSellingEvent {}
 
 class DashboardHotSellingLoadedEvent extends DashboardHotSellingEvent {
   final int id;
-  String token;
+  final String token;
   DashboardHotSellingLoadedEvent(this.id,this.token);
 }

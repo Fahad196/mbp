@@ -19,12 +19,12 @@ class OrderSummaryModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['table_no'] = this.tableNo;
-    data['flag'] = this.flag;
-    data['resturant_name'] = this.resturantName;
-    data['grandtotal'] = this.grandtotal;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['table_no'] = tableNo;
+    data['flag'] = flag;
+    data['resturant_name'] = resturantName;
+    data['grandtotal'] = grandtotal;
     return data;
   }
 }

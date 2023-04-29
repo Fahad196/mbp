@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 class ProfileModel {
   final int? id;
   final String? firstName;
@@ -38,17 +40,17 @@ class ProfileModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['designation'] = this.designation;
-    data['email'] = this.email;
-    data['username'] = this.username;
-    data['address'] = this.address;
-    data['employeeid'] = this.employeeid;
-    data['profile'] = this.profile;
-    data['phone'] = this.phone;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['designation'] = designation;
+    data['email'] = email;
+    data['username'] = username;
+    data['address'] = address;
+    data['employeeid'] = employeeid;
+    data['profile'] = profile;
+    data['phone'] = phone;
     return data;
   }
 }

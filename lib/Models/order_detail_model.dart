@@ -35,16 +35,16 @@ class OrderDetailModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['portion'] = this.portion;
-    data['item_name'] = this.itemName;
-    data['item_image'] = this.itemImage;
-    data['item_price'] = this.itemPrice;
-    data['item_price_total'] = this.itemPriceTotal;
-    data['item_quantity'] = this.itemQuantity;
-    data['resturant_id'] = this.resturantId;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['portion'] = portion;
+    data['item_name'] = itemName;
+    data['item_image'] = itemImage;
+    data['item_price'] = itemPrice;
+    data['item_price_total'] = itemPriceTotal;
+    data['item_quantity'] = itemQuantity;
+    data['resturant_id'] = resturantId;
+    data['id'] = id;
     return data;
   }
 }

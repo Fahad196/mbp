@@ -16,7 +16,7 @@ class ImageUploadBloc extends Bloc<ImageUploadEvent, ImageUploadState> {
       var data = await repository.uploadImage(event.image, event.token);
       log("image ${event.image.toString()}");
        log("token ${event.token.toString()}");
-      log("data:::::::::: ${data}");
+      log("data:::::::::: $data");
         emit(ImageUploadedstate(data));
       try {} catch (e) {
         log(e.toString());

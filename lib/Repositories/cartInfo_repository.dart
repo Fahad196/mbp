@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: file_names
 
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:mybigplate/Models/cartInfo_model.dart';
 import 'package:http/http.dart' as http;
 

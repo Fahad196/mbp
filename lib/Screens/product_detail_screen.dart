@@ -1,7 +1,5 @@
 // ignore_for_file: camel_case_types, use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_typing_uninitialized_variables, must_be_immutable, prefer_interpolation_to_compose_strings, non_constant_identifier_names, must_call_super, unrelated_type_equality_checks, prefer_adjacent_string_concatenation
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
@@ -308,7 +306,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         builder: (BuildContext context) {
           return Dialog(
             child: StatefulBuilder(builder: (context, StateSetter setState) {
-              return Container(
+              return SizedBox(
                 height: ScreenSizes.isMeduimScreen(context) ? 235.sp : 292.sp,
                 width: ScreenSizes.isMeduimScreen(context) ? 250.sp : 300.sp,
                 child: Column(

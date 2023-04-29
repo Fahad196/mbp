@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_interpolation_to_compose_strings
 
-import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -26,8 +26,8 @@ class FoodCategoryScreen extends StatefulWidget {
   final int? resId;
   final int? index;
   final String? token;
-  FoodCategoryScreen(
-      {this.categoryId, this.categoryName, this.resId, this.index, this.token});
+  const FoodCategoryScreen(
+      {super.key, this.categoryId, this.categoryName, this.resId, this.index, this.token});
 
   @override
   State<FoodCategoryScreen> createState() => _FoodCategoryScreenState();

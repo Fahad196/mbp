@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:mybigplate/Models/profile_model.dart';
 
 abstract class ProfileState extends Equatable{
@@ -16,6 +15,6 @@ class ProfileLoadedState extends ProfileState{
   List<Object?> get props => [profiles];
 }
 class ProfileErrorState extends ProfileState{
-  String message;
+ final String message;
   ProfileErrorState(this.message);
 }

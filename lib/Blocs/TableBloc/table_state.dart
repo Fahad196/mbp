@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_typing_uninitialized_variables
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:mybigplate/Models/table_model.dart';
 
 class TableState extends Equatable {

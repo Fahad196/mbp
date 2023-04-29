@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:mybigplate/Models/order_summary_model.dart';
-
 import '../../Models/order_detail_model.dart';
 
 abstract class OrderDetailState extends Equatable{
@@ -11,7 +9,7 @@ abstract class OrderDetailState extends Equatable{
 
 class OrderDetailLoadingState extends OrderDetailState{}
 class OrderDetailLoadedState extends OrderDetailState{
-  List<OrderDetailModel> ordersDetail;
+ final List<OrderDetailModel> ordersDetail;
   OrderDetailLoadedState(this.ordersDetail);
   @override
   List<Object?> get props => [ordersDetail];

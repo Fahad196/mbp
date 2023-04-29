@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../Models/image_upload_model.dart';
 
 class ImageUploadRepository {
   Future uploadImage(String imagePath, String token) async {

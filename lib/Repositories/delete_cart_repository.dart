@@ -30,10 +30,10 @@ class DeleteCartRepository {
         log("jsonResponse :::::::::::::$jsonResponse");
         var d = DeleteCartModel.fromJson(jsonResponse);
       //  log("d :::::::::$d");
-        return;
+        return d;
       }
     } catch (e) {
-      // print("Error $e");
+     log("Error $e");
       throw e;
     }
   }

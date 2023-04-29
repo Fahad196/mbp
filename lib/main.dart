@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously
 
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,14 +15,12 @@ import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_bloc.dart';
 import 'package:mybigplate/Blocs/ImageUploadBloc/image_upload_bloc.dart';
 import 'package:mybigplate/Blocs/InternetBloc/internet_bloc.dart';
 import 'package:mybigplate/Blocs/LoginBloc/login_bloc.dart';
-import 'package:mybigplate/Blocs/LoginBloc/login_event.dart';
 import 'package:mybigplate/Blocs/LogoutBloc/logout_bloc.dart';
 import 'package:mybigplate/Blocs/OrderSummaryBloc/order_summary_bloc.dart';
 import 'package:mybigplate/Blocs/ProfileBloc/profile_bloc.dart';
 import 'package:mybigplate/Blocs/ResturantBloc/resturant_bloc.dart';
 import 'package:mybigplate/Blocs/TableBloc/table_bloc.dart';
 import 'package:mybigplate/Blocs/UpdateQuantityCartBloc/update_quantity_cart_bloc.dart';
-import 'package:mybigplate/Models/login_model.dart';
 import 'package:mybigplate/Repositories/cartInfo_repository.dart';
 import 'package:mybigplate/Repositories/cart_respository.dart';
 import 'package:mybigplate/Repositories/cart_view_repository.dart';
@@ -41,7 +38,6 @@ import 'package:mybigplate/Screens/login_screen.dart';
 import 'package:mybigplate/Screens/resturant_screen.dart';
 import 'Blocs/DashboardMenuBloc/dashboard_menu_bloc.dart';
 import 'Blocs/DashboardTodayDishBloc.dart/dashboard_todaydish_bloc.dart';
-import 'Blocs/LoginBloc/login_state.dart';
 import 'Blocs/OrderDetailsBloc/order_detail_bloc.dart';
 import 'Blocs/OrderNowBloc/order_now_bloc.dart';
 import 'Repositories/dashboard_hotselling_respository.dart';
@@ -52,7 +48,7 @@ import 'Repositories/update_quantity_cart_repository.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  WidgetsFlutterBinding.ensureInitialized();
+ WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(MyApp()));
 }
@@ -95,7 +91,7 @@ class MyApp extends StatelessWidget {
                     FoodCategoryBloc(FoodCategoryRepository())),
             BlocProvider(create: (context) => CartBloc(CartRespository())),
             BlocProvider(
-                create: (context) => CartViewBloc(CartViewRespository())),
+                create: (context) => CartViewBloc(CartViewRespository(),UpadteQuantityCartRepository())),
             BlocProvider(
                 create: (context) => DeleteCartBloc(DeleteCartRepository())),
             BlocProvider(
@@ -143,7 +139,6 @@ class _StartPageState extends State<StartPage> {
     getToken();
     super.initState();
   }
-
   getToken() async {
     if (await s.containsKey(key: "token")) {
       String? token = await s.read(key: "token");

@@ -1,6 +1,5 @@
 // ignore_for_file: empty_constructor_bodies, avoid_print
 
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybigplate/Blocs/TableBloc/table_event.dart';

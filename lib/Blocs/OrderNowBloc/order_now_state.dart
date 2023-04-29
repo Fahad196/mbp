@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:equatable/equatable.dart';
-import 'package:mybigplate/Models/order_now_model.dart';
 
 abstract class OrderNowState extends Equatable {
   @override

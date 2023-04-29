@@ -10,7 +10,7 @@ class DashboardMenuState extends Equatable {
 class DashboardMenuLoadingState extends DashboardMenuState {}
 
 class DashboardMenuLoadedstate extends DashboardMenuState {
-  List<DashboardMenuModel> menu;
+ final List<DashboardMenuModel> menu;
   DashboardMenuLoadedstate(this.menu);
   @override
   List<Object?> get props => [menu];

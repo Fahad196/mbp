@@ -41,18 +41,18 @@ final  String? resturantId;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['isHalf'] = this.isHalf;
-    data['full_price'] = this.fullPrice;
-    data['half_price'] = this.halfPrice;
-    data['item_image'] = this.itemImage;
-    data['item_name'] = this.itemName;
-    data['item_desp'] = this.itemDesp;
-    data['type'] = this.type;
-    data['time'] = this.time;
-    data['category_id'] = this.categoryId;
-    data['resturant_id'] = this.resturantId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['isHalf'] = isHalf;
+    data['full_price'] = fullPrice;
+    data['half_price'] = halfPrice;
+    data['item_image'] = itemImage;
+    data['item_name'] = itemName;
+    data['item_desp'] = itemDesp;
+    data['type'] = type;
+    data['time'] = time;
+    data['category_id'] = categoryId;
+    data['resturant_id'] = resturantId;
     return data;
   }
 }

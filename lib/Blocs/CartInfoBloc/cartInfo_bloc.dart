@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, unrelated_type_equality_checks
+// ignore_for_file: unused_local_variable, unrelated_type_equality_checks, file_names
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybigplate/Blocs/CartInfoBloc/cartInfo_event.dart';
 import 'package:mybigplate/Blocs/CartInfoBloc/cartInfo_state.dart';

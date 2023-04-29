@@ -1,34 +1,20 @@
 class UpdateQuantityCartModel {
- final int? cartid;
- final int? itemPrice;
- final int? itemQuantity;
- final int? resturantId;
- final String? portion;
+ final int? quantity;
+ final String? message;
 
-  UpdateQuantityCartModel(
-      {this.cartid,
-      this.itemPrice,
-      this.itemQuantity,
-      this.resturantId,
-      this.portion});
+  UpdateQuantityCartModel({this.quantity, this.message});
 
   factory UpdateQuantityCartModel.fromJson(Map<String, dynamic> json) {
-   return UpdateQuantityCartModel(
-     cartid : json['cartid'],
-    itemPrice : json['item_price'],
-    itemQuantity : json['item_quantity'],
-    resturantId : json['resturant_id'],
-    portion : json['portion'],
-   );
+    return UpdateQuantityCartModel(
+      quantity : json['quantity'],
+    message : json['message'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cartid'] = this.cartid;
-    data['item_price'] = this.itemPrice;
-    data['item_quantity'] = this.itemQuantity;
-    data['resturant_id'] = this.resturantId;
-    data['portion'] = this.portion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['quantity'] = quantity;
+    data['message'] = message;
     return data;
   }
 }

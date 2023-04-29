@@ -1,10 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mybigplate/Blocs/OrderDetailsBloc/order_detail_bloc.dart';
@@ -19,12 +16,10 @@ class OrderDetailScreen extends StatelessWidget {
   final int? orderId;
   final String token;
   final int? grandTotal;
-  OrderDetailScreen({ this.orderId,required this.token,this.grandTotal});
+  const OrderDetailScreen({ this.orderId,required this.token,this.grandTotal});
   @override
   Widget build(BuildContext context) {
-    print(orderId);
-    print(token);
-    log(grandTotal!);
+   
     BlocProvider.of<OrderDetailBloc>(context).add(OrderDetailLoadedEvent(token, orderId!));
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 249, 239, 239),
@@ -234,7 +229,7 @@ class OrderDetailScreen extends StatelessWidget {
                                   : 14.sp,
                             ),
                           ),
-                          Text("${grandTotal} Rs",
+                          Text("$grandTotal Rs",
                               style: TextStyle(
                                 fontFamily: 'met',
                                 fontSize: ScreenSizes.isMeduimScreen(context)

@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:equatable/equatable.dart';
-import 'package:mybigplate/Models/cartInfo_model.dart';
 
 abstract class CartInfoState extends Equatable {
   @override

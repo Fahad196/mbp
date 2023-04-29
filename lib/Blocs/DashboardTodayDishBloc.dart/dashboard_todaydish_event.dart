@@ -9,6 +9,6 @@ class DashboardTodayDishLoadingEvent extends DashboardTodayDishEvent {}
 
 class DashboardTodayDishLoadedEvent extends DashboardTodayDishEvent {
   final int resId;
-  String token;
+ final String token;
  DashboardTodayDishLoadedEvent(this.resId,this.token);
 }

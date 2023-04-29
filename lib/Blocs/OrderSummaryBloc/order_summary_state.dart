@@ -9,7 +9,7 @@ abstract class OrderSummaryState extends Equatable{
 
 class OrderSummaryLoadingState extends OrderSummaryState{}
 class OrderSummaryLoadedState extends OrderSummaryState{
-  List<OrderSummaryModel> orders;
+ final List<OrderSummaryModel> orders;
   OrderSummaryLoadedState(this .orders);
   @override
   List<Object?> get props => [orders];

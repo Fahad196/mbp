@@ -12,9 +12,9 @@ class TableModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['table_no'] = this.tableNo;
-    data['resturant_id'] = this.resturantId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['table_no'] = tableNo;
+    data['resturant_id'] = resturantId;
     return data;
   }
 }

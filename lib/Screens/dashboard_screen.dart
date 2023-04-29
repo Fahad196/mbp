@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, sort_child_properties_last, unused_local_variable, unused_field, prefer_final_fields, prefer_adjacent_string_concatenation
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, sort_child_properties_last, unused_local_variable, unused_field, prefer_final_fields, prefer_adjacent_string_concatenation, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -10,7 +10,7 @@ abstract class CartState extends Equatable{
 class CartLoadingState extends CartState {}
 
 class AddToCartState extends CartState{
-  List<CartModel> products;
+ final List<CartModel> products;
   AddToCartState({required this.products});
   @override
   List<Object?> get props => [products];

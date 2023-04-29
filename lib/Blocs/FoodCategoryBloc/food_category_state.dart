@@ -2,7 +2,6 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:mybigplate/Models/food_category_model.dart';
-import '../../Models/dashboard_todaydish_model.dart';
 
 class FoodCategoryState extends Equatable {
   @override

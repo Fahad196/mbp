@@ -1,18 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, curly_braces_in_flow_control_structures, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mybigplate/Screens/dashboard_screen.dart';
-import 'package:mybigplate/Screens/resturant_screen.dart';
 import 'package:mybigplate/Util/colors.dart';
-
 import '../Util/screen_sizes.dart';
 import '../Widgets/custom_bottom_navbar.dart';
 
 class FeedbackScreen extends StatelessWidget {
+  const FeedbackScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +90,7 @@ class FeedbackScreen extends StatelessWidget {
                       return AlertDialog(
                           elevation: 5,
                           backgroundColor: Color.fromARGB(255, 224, 220, 220),
-                          content: Container(
+                          content: SizedBox(
                             height: ScreenSizes.isMeduimScreen(context)?110.sp:160.sp,
           
 
@@ -159,7 +155,7 @@ class FeedbackScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 90.sp,
         child: CustomPaint(
           painter: CustomsBottomBar(),

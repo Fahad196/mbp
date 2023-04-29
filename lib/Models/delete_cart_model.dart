@@ -16,10 +16,10 @@ class DeleteCartModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['cartid'] = this.cartId;
-    data['resturant_id'] = this.resturantId;
-    data['portion'] = this.portion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['cartid'] = cartId;
+    data['resturant_id'] = resturantId;
+    data['portion'] = portion;
     return data;
   }
 }

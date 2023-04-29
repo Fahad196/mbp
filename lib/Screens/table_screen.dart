@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last, deprecated_member_use, unnecessary_overrides, unnecessary_brace_in_string_interps, prefer_if_null_operators, avoid_print
 
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +51,6 @@ class _TableScreenState extends State<TableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return BlocListener<InternetBloc, internetState>(
       listener: (context, interstate) {
          if (interstate is InternetGainedState) {
@@ -100,7 +98,7 @@ class _TableScreenState extends State<TableScreen> {
                 children: [
                   Align(
                     alignment: Alignment.topCenter,
-                    child: Container(
+                    child: SizedBox(
                         height: 300.sp,
                         width: double.infinity,
                         child: ClipPath(
@@ -262,8 +260,9 @@ class _TableScreenState extends State<TableScreen> {
                             validator: (value) {
                               if (value!.isEmpty || value.length > 2) {
                                 return "The Number Of Guests Should Not Be Greater Than 20!";
-                              } else
+                              } else {
                                 return null;
+                              }
                             },
                           ),
                         ),
@@ -304,7 +303,7 @@ class _TableScreenState extends State<TableScreen> {
                     fontSize: 16.0);
               }
             },
-            child: Container(
+            child: SizedBox(
               height: ScreenSizes.isMeduimScreen(context) ? 75.sp : 93.sp,
               child: CustomPaint(
                 painter: CustomsBottomBar(),

@@ -22,5 +22,6 @@ class DeleteCartBloc extends Bloc<DeleteCartEvent, DeleteCartState> {
         emit(DeleteCartErrorState(e.toString()));
       }
     });
+    on<RefEvent>((event, emit) => emit(RefState()));
   }
 }

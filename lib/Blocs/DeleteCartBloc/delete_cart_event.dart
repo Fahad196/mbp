@@ -18,3 +18,8 @@ DeleteItemCartEvent(this.cartId,this.resturantId,this.portion,this.token);
 @override
   List<Object?> get props => [cartId,resturantId,portion,token];
 }
+
+class RefEvent extends DeleteCartEvent{
+  @override
+  List<Object?> get props => [];
+}

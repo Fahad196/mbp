@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_event.dart';
 import 'package:mybigplate/Blocs/FoodCategoryBloc/food_category_state.dart';
-import 'package:mybigplate/Models/food_category_model.dart';
 import 'package:mybigplate/Repositories/food_category_repository.dart';
 
 class FoodCategoryBloc extends Bloc<FoodCategoryEvent, FoodCategoryState> {

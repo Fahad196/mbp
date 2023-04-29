@@ -1,10 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mybigplate/Screens/resturant_screen.dart';
 
 import '../Util/colors.dart';
 import '../Util/screen_sizes.dart';
@@ -15,6 +12,8 @@ class TranferOrderScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isObsecure = true;
+
+   TranferOrderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +80,9 @@ class TranferOrderScreen extends StatelessWidget {
                               value.length < 4 ||
                               value.length > 10) {
                             return "* Required";
-                          } else
+                          } else {
                             return null;
+                          }
                         },
                       ),
                     ),
@@ -121,8 +121,9 @@ class TranferOrderScreen extends StatelessWidget {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "* Required";
-                            } else
+                            } else {
                               return null;
+                            }
                           },
                         )),
                   ]),
@@ -140,18 +141,12 @@ class TranferOrderScreen extends StatelessWidget {
                 var _username = nameController.text;
                 var _passwd = passwordController.text;
                 if (_formKey.currentState!.validate()) {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => ResturantScreen(),
-                  //     ));
+                
                 }
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(4.sp),
+                foregroundColor: Colors.white, backgroundColor: AppColors.darkOrange, padding: EdgeInsets.all(4.sp),
                 fixedSize: Size(ScreenSizes.isMeduimScreen(context)?60.sp:120.sp, ScreenSizes.isMeduimScreen(context)?20.sp:38.sp,),
-                primary: AppColors.darkOrange,
-                onPrimary: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 elevation: 6,
@@ -159,7 +154,7 @@ class TranferOrderScreen extends StatelessWidget {
             )
           ]),
         ),
-        bottomNavigationBar:Container(
+        bottomNavigationBar:SizedBox(
           height: 60.sp,
           child: CustomPaint(painter: CustomsBottomBar()),
         ) ,

@@ -9,7 +9,7 @@ class DashboardTodayDishState extends Equatable {
 class DashboardTodayDishLoadingState extends DashboardTodayDishState {}
 
 class DashboardTodayDishLoadedstate extends DashboardTodayDishState {
-  List<DashboardTodayDishModel> todayDish;
+  final List<DashboardTodayDishModel> todayDish;
   DashboardTodayDishLoadedstate(this.todayDish);
   @override
   List<Object?> get props => [todayDish];
