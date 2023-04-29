@@ -252,9 +252,23 @@ class _CartScreenState extends State<CartScreen> {
                                                         .textColorWhite,
                                                   ),
                                                 ),
-                                                BlocBuilder<
+                                                BlocConsumer<
                                                     UpdateQuantityCartBloc,
                                                     UpdateQuantityCartState>(
+                                                  listener: (context, state) {
+                                                    if (state
+                                                        is IncreaseItemQuantityCartState) {
+                                                      // BlocProvider.of<
+                                                      //             CartViewBloc>(
+                                                      //         context)
+                                                      //     .add(
+                                                      //   CartViewLoadedEvent(
+                                                      //     widget.token,
+                                                      //     widget.resId,
+                                                      //   ),
+                                                      // );
+                                                    }
+                                                  },
                                                   builder: (context, state) {
                                                     if (state
                                                         is InitialQuantityState) {
@@ -289,8 +303,11 @@ class _CartScreenState extends State<CartScreen> {
                                                     } else if (state
                                                         is IncreaseItemQuantityCartState) {
                                                       return Text(
-                                                        cartList[index]
-                                                            .itemQuantity
+                                                        // cartList[index]
+                                                        //     .itemQuantity
+                                                        //     .toString(),
+                                                        state.quantityCartModel
+                                                            .quantity!
                                                             .toString(),
                                                         style: TextStyle(
                                                             fontFamily: 'met',
@@ -323,37 +340,41 @@ class _CartScreenState extends State<CartScreen> {
                                                   },
                                                 ),
                                                 InkWell(
-                                                  onTap: (){
+                                                  onTap: () {
                                                     var q = int.parse(
-                                                        cartList[index]
-                                                            .itemQuantity!);
+                                                      cartList[index]
+                                                          .itemQuantity!,
+                                                    );
+                                                    log('Before increase: ${q}');
                                                     setState(() {
-                                                      q++;
+                                                      q = q + 1;
                                                     });
+                                                    log('On increase:${q} ');
 
                                                     BlocProvider.of<
                                                                 UpdateQuantityCartBloc>(
                                                             context)
-                                                        .add(IncreaseItemQuantityCartEvent(
-                                                            cartId:
-                                                                cartList[index]
-                                                                    .id!,
-                                                            itemPrice:
-                                                                int
-                                                                    .parse(
-                                                                        cartList[index]
-                                                                            .itemPrice!),
-                                                            itemQuantity: q,
-                                                            resturantId: int
-                                                                .parse(cartList[
-                                                                        index]
-                                                                    .resturantId!),
-                                                            portion:
-                                                                cartList[index]
-                                                                    .portion
-                                                                    .toString(),
-                                                            token:
-                                                                widget.token));
+                                                        .add(
+                                                      IncreaseItemQuantityCartEvent(
+                                                          int.parse(
+                                                              cartList[index]
+                                                                  .resturantId!),
+                                                          context,
+                                                          cartId: cartList[index]
+                                                              .id!,
+                                                          itemPrice: int.parse(
+                                                              cartList[index]
+                                                                  .itemPrice!),
+                                                          itemQuantity: q,
+                                                          resturantId: int.parse(
+                                                              cartList[index]
+                                                                  .resturantId!),
+                                                          portion:
+                                                              cartList[index]
+                                                                  .portion
+                                                                  .toString(),
+                                                          token: widget.token),
+                                                    );
                                                   },
                                                   child: Icon(
                                                     FontAwesomeIcons.plus,

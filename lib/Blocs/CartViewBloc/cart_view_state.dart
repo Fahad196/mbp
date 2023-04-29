@@ -1,28 +1,29 @@
 import 'package:equatable/equatable.dart';
 import 'package:mybigplate/Models/cart_view_model.dart';
 
-abstract class CartViewState extends Equatable{
+abstract class CartViewState extends Equatable {
   @override
   List<Object?> get props => [];
 }
+
 class CartViewLoadingState extends CartViewState {}
-class CartViewLoadedState extends CartViewState{
- final List<CartViewModel> listOfCartItems;
+
+class CartViewLoadedState extends CartViewState {
+  final List<CartViewModel> listOfCartItems;
   CartViewLoadedState(this.listOfCartItems);
-@override
+  @override
   List<Object?> get props => [listOfCartItems];
 }
-class CartViewErrorState extends CartViewState{
+
+class CartViewErrorState extends CartViewState {
   final String message;
   CartViewErrorState(this.message);
 }
-
 
 // class InitialQuantityState extends CartViewState{
 // }
 
 // class UpdateQuantityCartLoadingState extends CartViewState{}
-
 
 // class IncreaseItemQuantityCartState extends CartViewState{
 //  final  UpdateQuantityCartModel quantityCartModel;
@@ -43,7 +44,7 @@ class CartViewErrorState extends CartViewState{
 //   UpdateQuantityCartErrorState(this.message);
 // }
 
-class RefreshCartViewState extends CartViewState{
+class RefreshCartViewState extends CartViewState {
   @override
   List<Object?> get props => [];
 }

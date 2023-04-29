@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:mybigplate/Models/cart_view_model.dart';
@@ -20,6 +21,7 @@ class CartViewRespository {
       if (response.statusCode == 200) {
         final List jsonResponse = jsonDecode(response.body);
         var d = jsonResponse.map((e) => CartViewModel.fromJson(e)).toList();
+        log("Cart view loaded state item quantity:${d[0].itemQuantity}");
         return d;
       } else {
         throw Error();

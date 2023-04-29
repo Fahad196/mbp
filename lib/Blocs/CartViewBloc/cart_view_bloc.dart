@@ -8,20 +8,18 @@ import 'cart_view_event.dart';
 class CartViewBloc extends Bloc<CartViewEvent, CartViewState> {
   CartViewRespository respository;
   UpadteQuantityCartRepository repository1;
-  CartViewBloc(this.respository,this.repository1) : super(CartViewLoadingState()) {
+  CartViewBloc(this.respository, this.repository1)
+      : super(CartViewLoadingState()) {
     on<CartViewLoadingEvent>((event, emit) => emit(CartViewLoadingState()));
-    on<CartViewLoadedEvent>((event, emit) async{
+    on<CartViewLoadedEvent>((event, emit) async {
       try {
-        var data =await respository.getCartList(event.token,event.resId);
-      log("Data ::::::::::$data");
+        var data = await respository.getCartList(event.token, event.resId);
+        // log("Data ::::::::::$data");
         emit(CartViewLoadedState(data));
       } catch (e) {
         emit(CartViewErrorState(e.toString()));
       }
     });
-
-
-
 
 //  on<InitailQuantityEvent>(
 //         (event, emit) => emit(InitialQuantityState()));
@@ -34,9 +32,9 @@ class CartViewBloc extends Bloc<CartViewEvent, CartViewState> {
 //             event.itemQuantity,
 //             event.resturantId,
 //             event.portion,event.token);
-       
+
 //           emit(IncreaseItemQuantityCartState(quantityCartModel: data));
-       
+
 //       } catch (e) {
 //         log(e.toString());
 //         emit(UpdateQuantityCartErrorState(e.toString()));
@@ -51,14 +49,14 @@ class CartViewBloc extends Bloc<CartViewEvent, CartViewState> {
 //             event.itemQuantity,
 //             event.resturantId,
 //             event.portion,event.token);
-       
+
 //           emit(DecreaseItemQuantityCartState(quantityCartModel: data));
-       
+
 //       } catch (e) {
 //         log(e.toString());
 //         emit(UpdateQuantityCartErrorState(e.toString()));
 //       }
 //     });
-on<RefreshCartViewEvent>((event, emit) => emit(RefreshCartViewState()));
+    on<RefreshCartViewEvent>((event, emit) => emit(RefreshCartViewState()));
   }
 }
